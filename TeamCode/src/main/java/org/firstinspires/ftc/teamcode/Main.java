@@ -4,12 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.arcrobotics.ftclib.vision.SkystoneDetector;
 
+import org.firstinspires.ftc.teamcode.archive.SkystoneDetector;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @TeleOp(name="Main TeleOp", group="Juice TeleOp")
 public class Main extends OpMode{

@@ -1,8 +1,15 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.archive;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.teamcode.Color;
+import org.firstinspires.ftc.teamcode.Component;
+import org.firstinspires.ftc.teamcode.EMotor;
+import org.firstinspires.ftc.teamcode.Motor;
+import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.StepperServo;
 
 
 enum StateRed{ //Maybe add wait states

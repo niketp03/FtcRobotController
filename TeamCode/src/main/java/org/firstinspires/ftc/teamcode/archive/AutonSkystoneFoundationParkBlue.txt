@@ -1,10 +1,12 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.archive;
 
 import com.arcrobotics.ftclib.vision.SkystoneDetector;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.archive.SkystoneDetector;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -37,6 +39,7 @@ enum StateSkystoneBlue{ //Maybe add wait states
     PARK
 }
 
+@Disabled
 @TeleOp(name="1 Stone Blue", group="Auton Opmode")
 public class AutonSkystoneFoundationParkBlue extends OpMode {
 
