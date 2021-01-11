@@ -13,6 +13,18 @@ public class Robot {
     public Mecanum drivetrain;
     public Gyro gyro;
 
+    /*
+    Odometer 1 = R
+    Odometer 2 = L
+    Odometer 3 = M
+     */
+    public Pose robotPose = new Pose(
+            0.0, 0.0, Math.PI/2,
+            7.7716535, -7.5826772, -0.0551181,
+            -1.314961, -1.314961, -0.1673228,
+            0.6968503935
+            );
+
     //Autonomous Constants
     public float currentR = 0.0f;
     public float targetR = 0.0f;
@@ -57,9 +69,9 @@ public class Robot {
 
     public Robot(HardwareMap map, boolean auton){
         this.components = new Component[]{
-                new Motor(0, "backLeft", map, false),              //0
-                new Motor(1, "backRight", map, true),              //1
-                new Motor(2, "frontLeft", map, false),             //2
+                new Motor(0, "backLeft", map, false),              //0 left odometer
+                new Motor(1, "backRight", map, true),              //1 right odometer
+                new Motor(2, "frontLeft", map, false),             //2 middle odometer
                 new Motor(3, "frontRight", map, true),             //3
         };
 
@@ -101,6 +113,13 @@ public class Robot {
     }
 
     public void updateLoop(){
+
+        robotPose.updateOdometry(new double[][]{
+                {(double) ((Motor) components[1]).getEncoderValue()}, //odo 1 = R
+                {(double) ((Motor) components[0]).getEncoderValue()}, //odo 2 = L
+                {(double) ((Motor) components[2]).getEncoderValue()}  //odo 3 = M
+        });
+
         currentR = gyro.getHeading();
         lastY = currentY;
         currentY = getOdoY();

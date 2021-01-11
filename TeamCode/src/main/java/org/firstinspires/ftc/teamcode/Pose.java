@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.Matrix;
 public class Pose {
 
     /*
-    R = radius of odometry wheel (m)
+    R = radius of odometry wheel (in)
      */
     private double R;
 
@@ -20,7 +20,7 @@ public class Pose {
     private double[][] CInverse;
 
     /*
-        x,y = coordinates of the robot
+        x,y = coordinates of the robot (in)
         heading = current direction of the robot (degrees)
             0 is forward
             90 is right
@@ -45,9 +45,9 @@ public class Pose {
     /*
     t1, t2, t3 = orientation of each odometry pod (radians)
 
-    x1, x2, x3 = X-coordinates of each odometry pod from center (m)
+    x1, x2, x3 = X-coordinates of each odometry pod from center (in)
 
-    y1, y2, y3 = Y-coordinates of each odometry pod from center (m)
+    y1, y2, y3 = Y-coordinates of each odometry pod from center (in)
      */
     public Pose(double t1, double t2, double t3, double x1, double x2, double x3, double y1, double y2, double y3, double R){
 
@@ -90,12 +90,11 @@ public class Pose {
      */
     public void updateOdometry(double[][] encoderTicks){
         double[][] deltaThetas = changeToRadians(encoderTicks);
-        double[][] temp = Matrix.multiply(CInverse, deltaThetas);
-        double[][] soln = Matrix.multiply(temp, new double[][]{{R}});
+        double[][] soln = Matrix.multiply(CInverse, deltaThetas);
 
-        double deltaX = soln[0][0];
-        double deltaY = soln[0][1];
-        double deltaHeading = soln[0][2];
+        double deltaX = soln[0][0] * R;
+        double deltaY = soln[0][1] * R;
+        double deltaHeading = soln[0][2] * R;
 
         x = x + deltaX;
         y = y + deltaY;
