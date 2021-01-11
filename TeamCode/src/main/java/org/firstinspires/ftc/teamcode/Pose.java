@@ -62,15 +62,35 @@ public class Pose {
     }
 
     /*
-    dTheta1, dTheta2, dTheta3 = change in rotation of each odometry pod (radians)
+    Changes an input value (encoder ticks) to a radian output
+     */
+    private double encoderToRad(double encVal){
+        return (encVal/8192) * 2 * Math.PI;
+    }
 
-    Matrix DeltaThetas:
+    /*
+    Changes a matrix of encoder ticks to a matrix of radians
+     */
+    private double[][] changeToRadians(double[][] matrixToChange){
+        for (int i = 0; i < matrixToChange.length; i++){
+            for (int j = 0; j < matrixToChange[i].length; j++){
+                matrixToChange[i][j] = encoderToRad(matrixToChange[i][j]);
+            }
+        }
+        return matrixToChange;
+    }
+
+    /*
+    dTheta1, dTheta2, dTheta3 = change in rotation of each odometry pod (encoder ticks)
+
+    Matrix deltaThetas:
     | dTheta1 |
     | dTheta2 |
     | dTheta3 |
      */
-    public void updateOdometry(double[][] DeltaThetas){
-        double[][] temp = Matrix.multiply(CInverse, DeltaThetas);
+    public void updateOdometry(double[][] encoderTicks){
+        double[][] deltaThetas = changeToRadians(encoderTicks);
+        double[][] temp = Matrix.multiply(CInverse, deltaThetas);
         double[][] soln = Matrix.multiply(temp, new double[][]{{R}});
 
         double deltaX = soln[0][0];
