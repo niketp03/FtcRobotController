@@ -16,8 +16,8 @@ public class Pose {
     | a2, b2, c2 |
     | a3, b3, c3 |
      */
-    private double[][] C;
-    private double[][] CInverse;
+    public double[][] C;
+    public double[][] CInverse;
 
     /*
         x,y = coordinates of the robot (in)
@@ -42,6 +42,7 @@ public class Pose {
         return heading;
     }
 
+    public double[][] deltaThetas;
     /*
     t1, t2, t3 = orientation of each odometry pod (radians)
 
@@ -89,7 +90,7 @@ public class Pose {
     | dTheta3 |
      */
     public void updateOdometry(double[][] encoderTicks){
-        double[][] deltaThetas = changeToRadians(encoderTicks);
+        deltaThetas = changeToRadians(encoderTicks);
         double[][] soln = Matrix.multiply(CInverse, deltaThetas);
 
         double deltaX = soln[0][0] * R;

@@ -19,7 +19,7 @@ public class Robot {
     Odometer 3 = M
      */
     public Pose robotPose = new Pose(
-            0.0, 0.0, Math.PI/2,
+            Math.PI/2, Math.PI/2, 0.0,
             7.7716535, -7.5826772, -0.0551181,
             -1.314961, -1.314961, -0.1673228,
             0.6968503935
