@@ -62,6 +62,6 @@ public class Main extends OpMode{
         telemetry.addData("leftmemer", (robot.robotPose.C[0][0] + " " + robot.robotPose.C[0][1] + " " + robot.robotPose.C[0][2] + " " + robot.robotPose.C[1][0] + " " + robot.robotPose.C[1][1] + " " + robot.robotPose.C[1][2] + " " + robot.robotPose.C[2][0] + " " + robot.robotPose.C[2][1] + " " + robot.robotPose.C[2][2]));
         telemetry.addData("leftmemer", (robot.robotPose.CInverse[0][0] + " " + robot.robotPose.CInverse[0][1] + " " + robot.robotPose.CInverse[0][2] + " " + robot.robotPose.CInverse[1][0] + " " + robot.robotPose.CInverse[1][1] + " " + robot.robotPose.CInverse[1][2] + " " + robot.robotPose.CInverse[2][0] + " " + robot.robotPose.CInverse[2][1] + " " + robot.robotPose.CInverse[2][2]));
         telemetry.addData("leftmemer", (robot.robotPose.deltaThetas[1][0] + " " + robot.robotPose.deltaThetas[1][0] + " " + robot.robotPose.deltaThetas[2][0]));
-
+        telemetry.addData("leftmemer", (robot.robotPose.encoderTicks[1][0] + " " + robot.robotPose.encoderTicks[1][0] + " " + robot.robotPose.encoderTicks[2][0]));
     }
 }

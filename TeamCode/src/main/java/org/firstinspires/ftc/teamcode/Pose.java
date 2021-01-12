@@ -43,6 +43,9 @@ public class Pose {
     }
 
     public double[][] deltaThetas;
+
+    public double[][] encoderTicks;
+
     /*
     t1, t2, t3 = orientation of each odometry pod (radians)
 
@@ -92,6 +95,7 @@ public class Pose {
     | dTheta3 |
      */
     public void updateOdometry(double[][] encoderTicks){
+        this.encoderTicks = encoderTicks;
         deltaThetas = changeToRadians(encoderTicks);
         double[][] soln = Matrix.multiply(CInverse, deltaThetas);
 
