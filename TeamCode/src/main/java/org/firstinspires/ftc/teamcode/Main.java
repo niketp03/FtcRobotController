@@ -50,8 +50,8 @@ public class Main extends OpMode{
             robot.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, -1*gamepad1.right_stick_x);
         }
 
-        telemetry.addData("rot", robot.currentR);
-        telemetry.addData("x", robot.getOdoX());
-        telemetry.addData("y", robot.getOdoY());
+        telemetry.addData("rot", robot.robotPose.getHeading());
+        telemetry.addData("x", robot.robotPose.getX());
+        telemetry.addData("y", robot.robotPose.getY());
     }
 }

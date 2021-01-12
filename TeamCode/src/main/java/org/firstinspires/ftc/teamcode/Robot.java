@@ -69,10 +69,10 @@ public class Robot {
 
     public Robot(HardwareMap map, boolean auton){
         this.components = new Component[]{
-                new Motor(0, "backLeft", map, false),              //0 left odometer
-                new Motor(1, "backRight", map, true),              //1 right odometer
-                new Motor(2, "frontLeft", map, false),             //2 middle odometer
-                new Motor(3, "frontRight", map, true),             //3
+                new Motor(3, "backLeft", map, true),              //0 left odometer
+                new Motor(2, "backRight", map, false),              //1 right odometer
+                new Motor(1, "frontLeft", map, true),             //2 middle odometer
+                new Motor(0, "frontRight", map, false),             //3
         };
 
         if (auton){
