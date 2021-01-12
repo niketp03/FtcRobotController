@@ -30,6 +30,8 @@ public class Pose {
     private double y = 0.0;
     private double heading = 0.0;
 
+
+
     public double getX() {
         return x;
     }
@@ -45,6 +47,12 @@ public class Pose {
     public double[][] deltaThetas;
 
     public double[][] encoderTicks;
+    public double[][] deltaEncoderTicks;
+    public double[][] oldTicks = new double[][]{
+            {0},
+            {0},
+            {0}
+    };
 
     /*
     t1, t2, t3 = orientation of each odometry pod (radians)
@@ -94,17 +102,24 @@ public class Pose {
     | dTheta2 |
     | dTheta3 |
      */
-    public void updateOdometry(double[][] encoderTicks){
+    public void updateOdometry(double[][] encoderTicks) {
+
         this.encoderTicks = encoderTicks;
-        deltaThetas = changeToRadians(encoderTicks);
+
+        for (int i = 0; i < 3; i++) {
+            this.deltaEncoderTicks[i][0] = this.encoderTicks[i][0] - this.oldTicks[i][0];
+        }
+
+        deltaThetas = changeToRadians(this.deltaEncoderTicks);
         double[][] soln = Matrix.multiply(CInverse, deltaThetas);
 
         double deltaX = soln[0][0] * R;
-        double deltaY = soln[0][1] * R;
-        double deltaHeading = soln[0][2] * R;
+        double deltaY = soln[1][0] * R;
+        double deltaHeading = soln[2][0] * R;
 
         x = x + deltaX;
         y = y + deltaY;
         heading = heading + deltaHeading;
+        this.oldTicks = encoderTicks;
     }
 }
