@@ -53,5 +53,10 @@ public class Main extends OpMode{
         telemetry.addData("rot", robot.robotPose.getHeading());
         telemetry.addData("x", robot.robotPose.getX());
         telemetry.addData("y", robot.robotPose.getY());
+
+        telemetry.addData("leftmemer", robot.drivetrain.frontLeft.getEncoderValue());
+        telemetry.addData("leftmemer", robot.drivetrain.frontRight.getEncoderValue());
+        telemetry.addData("leftmemer", robot.drivetrain.backLeft.getEncoderValue());
+        telemetry.addData("leftmemer", robot.drivetrain.backRight.getEncoderValue());
     }
 }
