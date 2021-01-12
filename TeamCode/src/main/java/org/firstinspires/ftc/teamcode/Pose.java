@@ -72,7 +72,9 @@ public class Pose {
     /*
     Changes a matrix of encoder ticks to a matrix of radians
      */
-    private double[][] changeToRadians(double[][] matrixToChange){
+    private double[][] changeToRadians(double[][] matrixTemp){
+        double[][] matrixToChange = matrixTemp;
+
         for (int i = 0; i < matrixToChange.length; i++){
             for (int j = 0; j < matrixToChange[i].length; j++){
                 matrixToChange[i][j] = encoderToRad(matrixToChange[i][j]);
