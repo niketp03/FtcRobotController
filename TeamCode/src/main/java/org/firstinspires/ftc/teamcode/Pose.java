@@ -106,10 +106,6 @@ public class Pose {
 
         this.encoderTicks = encoderTicks;
 
-        for (int i = 0; i < 3; i++) {
-
-        }
-
         this.deltaEncoderTicks[0][0] = this.encoderTicks[0][0] - this.oldTicks[0][0];
         this.deltaEncoderTicks[1][0] = this.encoderTicks[1][0] - this.oldTicks[1][0];
         this.deltaEncoderTicks[2][0] = this.encoderTicks[2][0] - this.oldTicks[2][0];
