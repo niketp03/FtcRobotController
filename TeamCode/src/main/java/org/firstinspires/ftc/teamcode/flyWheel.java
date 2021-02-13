@@ -27,7 +27,7 @@ public class FlyWheel {
 
         shooter1Speed = AUTONCONST;
         shooter2Speed = AUTONCONST;
-        private lastTime_ = System.currentTimeMillis();
+        private long lastTime = System.currentTimeMillis();
         double pastTicks = shooter1.getEncoderValue();
         double pastTicks2 = shooter2.getEncoderValue();
 
