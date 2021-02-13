@@ -44,7 +44,8 @@ public class FlyWheel {
         shooter2.setSpeed(Range.clip(shooter2Speed, -1, 1));
 
         long time = System.currentTimeMillis();
-
+        
+        //calculating RPM from rotations per second
         if ((time - LastTime) == 1000){
 
             double currentTicks = shooter1.getEncoderValue();
