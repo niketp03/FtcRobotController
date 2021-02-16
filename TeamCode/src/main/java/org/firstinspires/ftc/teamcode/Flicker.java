@@ -13,19 +13,19 @@ public class Flicker {
 
     public Flicker(Component servo){
         this.flickerServo = (StepperServo) servo;
-        flickerServo.setPosition(initialAngle);
+        flickerServo.setAngle(initialAngle);
     }
 
     //Run when button pressed
     public void flick(){
-        flickerServo.setPosition(extendedAngle);
+        flickerServo.setAngle(extendedAngle);
         timeOfClick = System.currentTimeMillis();
     }
 
     //Run in update loop robot class
     public void checkIfMoveBack() {
         if (System.currentTimeMillis() - timeOfClick >= delay){
-            flickerServo.setPosition(initialAngle);
+            flickerServo.setAngle(initialAngle);
         }
     }
 

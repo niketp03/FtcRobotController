@@ -115,7 +115,7 @@ public class Robot {
     public void updateLoop(){
 
         robotPose.updateOdometry(new double[][]{
-                {(double) ((Motor) components[1]).getEncoderValue()}, //odo 1 = R
+                {-1 * (double) ((Motor) components[1]).getEncoderValue()}, //odo 1 = R
                 {(double) ((Motor) components[0]).getEncoderValue()}, //odo 2 = L
                 {(double) ((Motor) components[2]).getEncoderValue()}  //odo 3 = M
         });
