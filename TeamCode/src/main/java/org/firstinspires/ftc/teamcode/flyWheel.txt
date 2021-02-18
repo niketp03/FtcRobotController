@@ -9,8 +9,8 @@ public class FlyWheel {
     public Motor shooter1;
     public Motor shooter2;
 
-
-    private targetRPM = ?;
+    //temporary value set here
+    private targetRPM = 30;
 
     PIDController flywheelPID = new PIDController(targetRPM, rKPR, rKIR, rKDR, false);
     PIDController flywheelPID2 = new PIDController(targetRPM, rKPR, rKIR, rKDR, false);
