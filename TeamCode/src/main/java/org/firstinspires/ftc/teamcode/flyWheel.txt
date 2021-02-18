@@ -77,8 +77,8 @@ public class FlyWheel {
 
 
     public void resetMotorSpeeds(){
-        shooter1 = 1;
-        shooter2 = 1;
+        shooter1Speed = 1;
+        shooter2Speed = 1;
 
     }
 
