@@ -8,15 +8,26 @@ public class FlyWheel {
 
     public Motor shooter1;
     public Motor shooter2;
+    
+    private double targetRPM;
+    
+    private float shooter1Speed;
+    private float shooter2Speed;
+    
+    private long last lastTime;
+    
+    private double pastTicks;
+    private double pastTicks2;
 
     //temporary value set here
-    private targetRPM = 30;
+    targetRPM = 30.0;
 
     PIDController flywheelPID = new PIDController(targetRPM, rKPR, rKIR, rKDR, false);
     PIDController flywheelPID2 = new PIDController(targetRPM, rKPR, rKIR, rKDR, false);
 
 
-    public float shooter1Speed = 0, shooter2Speed = 0;
+    shooter1Speed = 0;
+    shooter2Speed = 0;
 
 
     public FlyWheel(Component shooter1, Component shooter2, boolean auton){
@@ -27,17 +38,18 @@ public class FlyWheel {
 
         shooter1Speed = 1;
         shooter2Speed = 1;
-        private long lastTime = System.currentTimeMillis();
-        double pastTicks = shooter1.getEncoderValue();
-        double pastTicks2 = shooter2.getEncoderValue();
+        
+        lastTime = System.currentTimeMillis();
+        
+        pastTicks = shooter1.getEncoderValue();
+        pastTicks2 = shooter2.getEncoderValue();
 
 
 
 
 
     }
-    private void move(){
-
+    public void moveWheels(){
 
 
         shooter1.setSpeed(Range.clip(shooter1Speed, -1, 1));
