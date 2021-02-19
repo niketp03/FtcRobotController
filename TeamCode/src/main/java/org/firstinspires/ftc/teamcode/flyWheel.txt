@@ -14,7 +14,7 @@ public class FlyWheel {
     private float shooter1Speed;
     private float shooter2Speed;
     
-    private long last lastTime;
+    private long lastTime;
     
     private double pastTicks;
     private double pastTicks2;
