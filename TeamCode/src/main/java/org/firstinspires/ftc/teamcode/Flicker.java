@@ -17,15 +17,14 @@ public class Flicker {
     }
 
     //Run when button pressed
-    public void flick(){
-        flickerServo.setAngle(extendedAngle);
-        timeOfClick = System.currentTimeMillis();
-    }
-
-    //Run in update loop robot class
-    public void checkIfMoveBack() {
-        if (System.currentTimeMillis() - timeOfClick >= delay){
-            flickerServo.setAngle(initialAngle);
+    public void flick(boolean clicked){
+        if (clicked){
+            flickerServo.setAngle(extendedAngle);
+            timeOfClick = System.currentTimeMillis();
+        } else {
+            if (System.currentTimeMillis() - timeOfClick >= delay){
+                flickerServo.setAngle(initialAngle);
+            }
         }
     }
 
