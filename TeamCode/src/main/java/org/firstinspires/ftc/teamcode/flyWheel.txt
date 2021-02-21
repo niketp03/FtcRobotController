@@ -9,10 +9,10 @@ public class FlyWheel {
     public Motor shooter1;
     public Motor shooter2;
     
-    private double targetRPM;
+    private double targetRPM = 30.0;
     
-    private float shooter1Speed;
-    private float shooter2Speed;
+    private float shooter1Speed=0.0f;
+    private float shooter2Speed=0.0f;
     
     private long lastTime;
     
@@ -20,19 +20,18 @@ public class FlyWheel {
     private double pastTicks2;
 
     //temporary value set here
-    targetRPM = 30.0;
+    
 
-    PIDController flywheelPID = new PIDController(targetRPM, rKPR, rKIR, rKDR, false);
-    PIDController flywheelPID2 = new PIDController(targetRPM, rKPR, rKIR, rKDR, false);
+    private PIDController flywheelPID = new PIDController(targetRPM, rKPR, rKIR, rKDR, false);
+    private PIDController flywheelPID2 = new PIDController(targetRPM, rKPR, rKIR, rKDR, false);
 
 
-    shooter1Speed = 0;
-    shooter2Speed = 0;
 
 
     public FlyWheel(Component shooter1, Component shooter2, boolean auton){
         this.shooter1 = (Motor) shooter1;
         this.shooter2 = (Motor) shooter2;
+        
 
 
 
