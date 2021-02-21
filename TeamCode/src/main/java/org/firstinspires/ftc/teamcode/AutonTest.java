@@ -14,6 +14,7 @@ public class AutonTest extends OpMode {
     @Override
     public void init() {
         robot = new Robot(hardwareMap, true);
+        robot.mpController.updateRequestedPose(24, 0, 0, 0, 0);
     }
 
     @Override
@@ -24,9 +25,12 @@ public class AutonTest extends OpMode {
     @Override
     public void loop() {
         robot.updateLoop();
-        robot.resetMotorSpeeds();
 
-        robot.changeTarget(0f, 0f, 90f);
+        telemetry.addData("xCor", robot.xCor);
+        telemetry.addData("yCor", robot.yCor);
+        telemetry.addData("rCor", robot.rCor);
+
+
         
         /* --Telemetry--
         telemetry.addData("stopped", robot.stopped(true));

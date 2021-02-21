@@ -18,20 +18,21 @@ public class Robot {
     Odometer 2 = L
     Odometer 3 = M
      */
+    /*
     public Pose2d robotPose = new Pose2d(
             -0.1673228,
             7.7716535,
             0.6968503935
     );
+    */
 
-    /*
     public Pose robotPose = new Pose(
             Math.PI/2, Math.PI/2, 0.0,
             7.7716535, -7.5826772, -0.0551181,
             -1.314961, -1.314961, -0.1673228,
             0.6968503935
             );
-     */
+
     //Autonomous Constants
     public float currentR = 0.0f;
     public float targetR = 0.0f;
@@ -68,11 +69,17 @@ public class Robot {
     private float lastX = 0;
     private float lastY = 0;
 
+    public float xCor = 0;
+    public float yCor = 0;
+    public float rCor = 0;
+
 
 
     private PIDController pidYDistance = new PIDController(0f, yKPR, yKIR, yKDR, false);
     private PIDController pidXDistance = new PIDController(0f, xKPR, xKIR, xKDR, false);
     private PIDController pidRotation = new PIDController(0.0f, rKPR, rKIR, rKDR, true);
+
+    public MotionProfilingController mpController = new MotionProfilingController(robotPose, 0.031, 0.0001);
 
     public Robot(HardwareMap map, boolean auton){
         this.components = new Component[]{
@@ -117,6 +124,8 @@ public class Robot {
         pidYDistance = new PIDController(0, yKPR, yKIR, yKDR, false);
         pidRotation = new PIDController(0, rKPR, rKIR, rKDR, true);
 
+
+
     }
 
     public void updateLoop(){
@@ -134,9 +143,13 @@ public class Robot {
         currentX = getOdoX();
 
 
-        if(pid){
-            autonMove();
-        }
+        double[] values = mpController.updateLoop();
+        xCor = (float) values[0];
+        yCor = (float) values[1];
+        rCor = (float) values[2];
+
+        drivetrain.move(xCor, yCor, rCor);
+
     }
 
     public void resetMotorSpeeds(){

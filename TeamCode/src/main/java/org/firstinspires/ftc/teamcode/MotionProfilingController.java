@@ -11,9 +11,9 @@ class MotionProfilingController {
     double maxV, maxA;
 
     double[] correctionVals = new double[3];
-    final double xKP = 1, xKI = 1, xKD = 1, xKV = 1, xKA = 1;
-    final double yKP = 1, yKI = 1, yKD = 1, yKV = 1, yKA = 1;
-    final double rKP = 1, rKI = 1, rKD = 1, rKV = 1, rKA = 1;
+    final double xKP = 10, xKI = 0, xKD = 0, xKV = 5, xKA = 0;
+    final double yKP = 10, yKI = 0, yKD = 0, yKV = 5, yKA = 0;
+    final double rKP = 10, rKI = 0, rKD = 0, rKV = 5, rKA = 0;
 
     MotionProfile motionProfileX;
     MotionProfile motionProfileY;
