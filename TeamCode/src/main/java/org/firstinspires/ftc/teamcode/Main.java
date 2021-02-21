@@ -9,6 +9,8 @@ public class Main extends OpMode{
     Robot robot;
     double maxXVel = 0;
     double maxYVel = 0;
+    double maxXAccel = 0;
+    double maxYAccel = 0;
     /*
     GAMEPAD CONTROLS:
     GAMEPAD 1:
@@ -58,6 +60,12 @@ public class Main extends OpMode{
         if (robot.robotPose.getYVelocity() > maxYVel) {
             maxYVel = robot.robotPose.getYVelocity();
         }
+        if (robot.robotPose.getXAcceleration() > maxXAccel) {
+            maxXAccel = robot.robotPose.getXAcceleration();
+        }
+        if (robot.robotPose.getYAcceleration() > maxYAccel) {
+            maxYAccel = robot.robotPose.getYAcceleration();
+        }
         telemetry.addData("rot", robot.robotPose.getHeading());
         telemetry.addData("x", robot.robotPose.getX());
         telemetry.addData("y", robot.robotPose.getY());
@@ -67,6 +75,8 @@ public class Main extends OpMode{
         telemetry.addData("yAccel", robot.robotPose.getYAcceleration());
         telemetry.addData("maxXVelocity", maxXVel);
         telemetry.addData("maxYVelocity", maxYVel);
+        telemetry.addData("maxXAcceleration", maxXAccel);
+        telemetry.addData("maxYAcceleration", maxYAccel);
         telemetry.addData("Middle Odometer", robot.drivetrain.frontLeft.getEncoderValue());
         telemetry.addData("Left Odometer", robot.drivetrain.backLeft.getEncoderValue());
         telemetry.addData("Right Odometer", robot.drivetrain.backRight.getEncoderValue());
