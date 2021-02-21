@@ -35,10 +35,9 @@ public class Pose {
     private double x = 0.0;
     private double y = 0.0;
     private double xVelocity = 0;
+    private double yVelocity = 0;
     private double deltaXVelocity = 0;
     private double deltaYVelocity = 0;
-
-    private double yVelocity = 0;
     private double xAcceleration = 0;
     private double yAcceleration = 0;
     private double heading = 0.0;

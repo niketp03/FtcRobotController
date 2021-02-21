@@ -7,7 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class Main extends OpMode{
 
     Robot robot;
-
+    double maxXVel = 0;
+    double maxYVel = 0;
     /*
     GAMEPAD CONTROLS:
     GAMEPAD 1:
@@ -51,7 +52,12 @@ public class Main extends OpMode{
         } else {
             robot.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, -1*gamepad1.right_stick_x);
         }
-
+        if (robot.robotPose.getXVelocity() > maxXVel) {
+            maxXVel = robot.robotPose.getXVelocity();
+        }
+        if (robot.robotPose.getYVelocity() > maxXVel) {
+            maxYVel = robot.robotPose.getYVelocity();
+        }
         telemetry.addData("rot", robot.robotPose.getHeading());
         telemetry.addData("x", robot.robotPose.getX());
         telemetry.addData("y", robot.robotPose.getY());
@@ -59,7 +65,8 @@ public class Main extends OpMode{
         telemetry.addData("yVel", robot.robotPose.getYVelocity());
         telemetry.addData("xAccel", robot.robotPose.getXAcceleration());
         telemetry.addData("yAccel", robot.robotPose.getYAcceleration());
-
+        telemetry.addData("maxXVelocity", maxXVel);
+        telemetry.addData("maxYVelocity", maxYVel);
         telemetry.addData("Middle Odometer", robot.drivetrain.frontLeft.getEncoderValue());
         telemetry.addData("Left Odometer", robot.drivetrain.backLeft.getEncoderValue());
         telemetry.addData("Right Odometer", robot.drivetrain.backRight.getEncoderValue());
