@@ -74,7 +74,7 @@ public class Pose {
         C = new double[][]{
                 {Math.cos(t1), Math.sin(t1), x1 * Math.sin(t1) -  y1 * Math.cos(t1)},
                 {Math.cos(t2), Math.sin(t2), x2 * Math.sin(t2) -  y2 * Math.cos(t2)},
-                {Math.cos(t3), Math.sin(t3), x3 * Math.sin(t3) -  y2 * Math.cos(t3)}
+                {Math.cos(t3), Math.sin(t3), x3 * Math.sin(t3) -  y3 * Math.cos(t3)}
         };
         CInverse = Matrix.inverse(C);
 

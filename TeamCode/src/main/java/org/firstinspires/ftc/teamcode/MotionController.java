@@ -17,7 +17,7 @@ class MotionController {
     private PIDController pidXDistance = new PIDController(0f, xKP, xKI, xKD, false);
     private PIDController pidRotation = new PIDController(0.0f, rKP, rKI, rKD, true);
 
-    boolean inMotion = false;
+    private boolean inMotion = true;
 
 
     public MotionController(Pose robotPose) {
@@ -28,6 +28,10 @@ class MotionController {
         this.reqX = x;
         this.reqY = y;
         this.reqTheta = theta;
+    }
+
+    public void setInMotion(boolean inMotion) {
+        this.inMotion = inMotion;
     }
 
     public double[] updateLoop(){
