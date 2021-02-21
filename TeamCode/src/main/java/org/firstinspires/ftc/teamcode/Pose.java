@@ -19,6 +19,12 @@ public class Pose {
     public double[][] C;
     public double[][] CInverse;
 
+    double[][] soln;
+
+    double deltaX;
+    double deltaY;
+    double deltaHeading;
+
     /*
         x,y = coordinates of the robot (in)
         heading = current direction of the robot (degrees)
@@ -28,8 +34,15 @@ public class Pose {
          */
     private double x = 0.0;
     private double y = 0.0;
-    private double heading = 0.0;
+    private double xVelocity = 0;
+    private double deltaXVelocity = 0;
+    private double deltaYVelocity = 0;
 
+    private double yVelocity = 0;
+    private double xAcceleration = 0;
+    private double yAcceleration = 0;
+    private double heading = 0.0;
+    private double time;
 
 
     public double getX() {
@@ -39,6 +52,24 @@ public class Pose {
     public double getY() {
         return y;
     }
+
+    public double getXVelocity() {
+        return xVelocity;
+    }
+
+
+    public double getYVelocity() {
+        return yVelocity;
+    }
+
+    public double getXAcceleration() {
+        return xAcceleration;
+    }
+
+    public double getYAcceleration() {
+        return yAcceleration;
+    }
+
 
     public double getHeading() {
         return (heading * 180) / Math.PI;
@@ -70,7 +101,7 @@ public class Pose {
     y1, y2, y3 = Y-coordinates of each odometry pod from center (in)
      */
     public Pose(double t1, double t2, double t3, double x1, double x2, double x3, double y1, double y2, double y3, double R){
-
+        this.time = System.currentTimeMillis();
         C = new double[][]{
                 {Math.cos(t1), Math.sin(t1), x1 * Math.sin(t1) -  y1 * Math.cos(t1)},
                 {Math.cos(t2), Math.sin(t2), x2 * Math.sin(t2) -  y2 * Math.cos(t2)},
@@ -87,6 +118,8 @@ public class Pose {
     private double encoderToRad(double encVal){
         return (encVal/8192) * 2 * Math.PI;
     }
+
+
 
     /*
     Changes a matrix of encoder ticks to a matrix of radians
@@ -120,14 +153,24 @@ public class Pose {
 
 
         deltaThetas = changeToRadians(this.deltaEncoderTicks);
-        double[][] soln = Matrix.multiply(CInverse, deltaThetas);
+        this.soln = Matrix.multiply(CInverse, deltaThetas);
 
-        double deltaX = soln[0][0] * R;
-        double deltaY = soln[1][0] * R;
-        double deltaHeading = soln[2][0] * R;
+        this.deltaX = soln[0][0] * R;
+        this.deltaY = soln[1][0] * R;
+        this.deltaHeading = soln[2][0] * R;
 
+        this.deltaXVelocity = (deltaX/(System.currentTimeMillis()-this.time)) - this.xVelocity;
+        this.deltaYVelocity = (deltaY/(System.currentTimeMillis()-this.time)) - this.yVelocity;
+        this.xVelocity = (deltaX/(System.currentTimeMillis()-this.time));
+        this.yVelocity = (deltaY/(System.currentTimeMillis()-this.time));
+
+        this.xAcceleration = (deltaXVelocity/(System.currentTimeMillis()-this.time));
+        this.yAcceleration = (deltaYVelocity/(System.currentTimeMillis()-this.time));
         x = x + deltaX;
         y = y + deltaY;
+        this.time = System.currentTimeMillis();
+
+
         heading = heading + deltaHeading;
         this.oldTicks = encoderTicks;
     }
