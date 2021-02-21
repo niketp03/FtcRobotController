@@ -55,7 +55,7 @@ public class Main extends OpMode{
         if (robot.robotPose.getXVelocity() > maxXVel) {
             maxXVel = robot.robotPose.getXVelocity();
         }
-        if (robot.robotPose.getYVelocity() > maxXVel) {
+        if (robot.robotPose.getYVelocity() > maxYVel) {
             maxYVel = robot.robotPose.getYVelocity();
         }
         telemetry.addData("rot", robot.robotPose.getHeading());
