@@ -22,7 +22,7 @@ public class Pose2d {
     private double heading = 0.0;
     private double time = System.currentTimeMillis();
 
-    public double getxVelocity() {
+    public double getXVelocity() {
         return xVelocity;
     }
 
@@ -30,7 +30,7 @@ public class Pose2d {
         this.xVelocity = xVelocity;
     }
 
-    public double getyVelocity() {
+    public double getYVelocity() {
         return yVelocity;
     }
 
@@ -38,7 +38,7 @@ public class Pose2d {
         this.yVelocity = yVelocity;
     }
 
-    public double getxAcceleration() {
+    public double getXAcceleration() {
         return xAcceleration;
     }
 
@@ -46,7 +46,7 @@ public class Pose2d {
         this.xAcceleration = xAcceleration;
     }
 
-    public double getyAcceleration() {
+    public double getYAcceleration() {
         return yAcceleration;
     }
 

@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 class MotionProfilingController {
-    Pose robotPose;
+    Pose2d robotPose;
 
     double reqX = 0, reqY = 0, reqTheta = 0, reqV = 0, reqA = 0;
     double correctionX = 0, correctionY = 0, correctionTheta = 0;
@@ -22,10 +22,10 @@ class MotionProfilingController {
     private MotionProfilePIDController pidXDistance;
     private PIDController pidTheta;
 
-    boolean inMotion = true;
+    boolean inMotion = false;
 
 
-    public MotionProfilingController(Pose robotPose, double maxV, double maxA) {
+    public MotionProfilingController(Pose2d robotPose, double maxV, double maxA) {
         this.maxV = maxV;
         this.maxA = maxA;
         this.robotPose = robotPose;
@@ -54,7 +54,7 @@ class MotionProfilingController {
         this.currentY = robotPose.getY();
         this.currentTheta = robotPose.getHeading();
 
-        if(inMotion){
+        /*if(inMotion){
             correctionX = pidXDistance.update(motionProfileX.getP(System.currentTimeMillis() - tStart));
 
             correctionY = pidYDistance.update(motionProfileY.getP(System.currentTimeMillis() - tStart));
@@ -68,7 +68,7 @@ class MotionProfilingController {
             correctionVals[0] = 0;
             correctionVals[1] = 0;
             correctionVals[2] = 0;
-        }
+        }*/
 
         return correctionVals;
     }

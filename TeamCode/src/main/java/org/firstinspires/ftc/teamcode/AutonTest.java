@@ -29,8 +29,9 @@ public class AutonTest extends OpMode {
         telemetry.addData("xCor", robot.xCor);
         telemetry.addData("yCor", robot.yCor);
         telemetry.addData("rCor", robot.rCor);
-
-
+        telemetry.addData("tDelta", (System.currentTimeMillis() - robot.mpController.tStart));
+        telemetry.addData("getVX", (robot.mpController.motionProfileX.getV(System.currentTimeMillis() - robot.mpController.tStart)));
+        telemetry.addData("getVY", (robot.mpController.motionProfileY.getV(System.currentTimeMillis() - robot.mpController.tStart)));
         
         /* --Telemetry--
         telemetry.addData("stopped", robot.stopped(true));
