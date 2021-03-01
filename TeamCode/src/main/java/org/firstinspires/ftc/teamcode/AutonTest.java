@@ -10,7 +10,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class AutonTest extends OpMode {
 
     Robot robot;
-
+    boolean first = true;
+    
     @Override
     public void init() {
         robot = new Robot(hardwareMap, true);

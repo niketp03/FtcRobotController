@@ -74,6 +74,7 @@ public class Robot {
     public float yCor = 0;
     public float rCor = 0;
 
+    public boolean auton;
 
 
     private PIDController pidYDistance = new PIDController(0f, yKPR, yKIR, yKDR, false);
@@ -83,6 +84,7 @@ public class Robot {
     public MotionProfilingController mpController = new MotionProfilingController(robotPose, 0.031, 0.0001);
 
     public Robot(HardwareMap map, boolean auton){
+        this.auton = auton;
         this.components = new Component[]{
                 new Motor(3, "backLeft", map, true),              //0 left odometer
                 new Motor(2, "backRight", map, false),              //1 right odometer
@@ -148,9 +150,9 @@ public class Robot {
         xCor = (float) values[0];
         yCor = (float) values[1];
         rCor = (float) values[2];
-
-        drivetrain.move(xCor, yCor, rCor);
-
+        if (auton) {
+            drivetrain.move(xCor, yCor, rCor);
+        }
     }
 
     public void resetMotorSpeeds(){

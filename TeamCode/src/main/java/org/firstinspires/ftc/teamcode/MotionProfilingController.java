@@ -6,7 +6,8 @@ class MotionProfilingController {
     double reqX = 0, reqY = 0, reqTheta = 0, reqV = 0, reqA = 0;
     double correctionX = 0, correctionY = 0, correctionTheta = 0;
     double currentX = 0, currentY = 0, currentTheta = 0;
-    long tStart;
+    long tStart, timeSinceInit;
+    boolean first = true;
 
     double maxV, maxA;
 
@@ -30,6 +31,7 @@ class MotionProfilingController {
         this.maxA = maxA;
         this.robotPose = robotPose;
         this.tStart = System.currentTimeMillis();
+        this.timeSinceInit = System.currentTimeMillis();
     }
 
     public void updateRequestedPose(double x, double y, double theta, double v, double a){
