@@ -22,7 +22,7 @@ class MotionProfilingController {
     private MotionProfilePIDController pidXDistance;
     private PIDController pidTheta;
 
-    boolean inMotion = false;
+    boolean inMotion = true;
 
 
     public MotionProfilingController(Pose robotPose, double maxV, double maxA) {
