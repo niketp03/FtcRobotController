@@ -150,8 +150,8 @@ public class Pose2d {
         double delta_middle_pos = (R * (delta_left_encoder_pos + delta_right_encoder_pos)) / 2;
         double delta_perp_pos = R * (delta_center_encoder_pos - forwardOffset * phi);
 
-        double deltaX = delta_middle_pos * Math.cos(heading) - delta_perp_pos * Math.sin(heading);
-        double deltaY = delta_middle_pos * Math.sin(heading) + delta_perp_pos * Math.cos(heading);
+        double deltaY = delta_middle_pos * Math.cos(heading) - delta_perp_pos * Math.sin(heading);
+        double deltaX = delta_middle_pos * Math.sin(heading) + delta_perp_pos * Math.cos(heading);
 
         this.deltaXVelocity = (deltaX/(System.currentTimeMillis()-this.time)) - this.xVelocity;
         this.deltaYVelocity = (deltaY/(System.currentTimeMillis()-this.time)) - this.yVelocity;

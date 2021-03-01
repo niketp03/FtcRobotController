@@ -11,7 +11,9 @@ public class AutonTest extends OpMode {
 
     Robot robot;
     boolean first = true;
-    
+    long timeChange = 0;
+    long lastTime = System.currentTimeMillis();
+
     @Override
     public void init() {
         robot = new Robot(hardwareMap, true);
@@ -25,14 +27,21 @@ public class AutonTest extends OpMode {
 
     @Override
     public void loop() {
-        robot.updateLoop();
 
+        robot.updateLoop();
+        if (first) {
+            timeChange = System.currentTimeMillis() - robot.mpController.initTime;
+            first = false;
+        }
+        telemetry.addData("dTime", System.currentTimeMillis() - lastTime);
+        lastTime = System.currentTimeMillis();
+        telemetry.addData("getP", robot.mpController.getP);
         telemetry.addData("xCor", robot.xCor);
         telemetry.addData("yCor", robot.yCor);
         telemetry.addData("rCor", robot.rCor);
-        telemetry.addData("tDelta", (System.currentTimeMillis() - robot.mpController.tStart));
-        telemetry.addData("getVX", (robot.mpController.motionProfileX.getV(System.currentTimeMillis() - robot.mpController.tStart)));
-        telemetry.addData("getVY", (robot.mpController.motionProfileY.getV(System.currentTimeMillis() - robot.mpController.tStart)));
+        telemetry.addData("tDelta", (System.currentTimeMillis() - timeChange - robot.mpController.initTime));
+        telemetry.addData("getVX", (robot.mpController.motionProfileX.getV(System.currentTimeMillis() - timeChange - robot.mpController.initTime)));
+        telemetry.addData("getVY", (robot.mpController.motionProfileY.getV(System.currentTimeMillis() - timeChange - robot.mpController.initTime)));
         
         /* --Telemetry--
         telemetry.addData("stopped", robot.stopped(true));

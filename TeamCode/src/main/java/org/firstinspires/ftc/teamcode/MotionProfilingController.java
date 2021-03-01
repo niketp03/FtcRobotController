@@ -6,9 +6,10 @@ class MotionProfilingController {
     double reqX = 0, reqY = 0, reqTheta = 0, reqV = 0, reqA = 0;
     double correctionX = 0, correctionY = 0, correctionTheta = 0;
     double currentX = 0, currentY = 0, currentTheta = 0;
-    long tStart, timeSinceInit;
+    long timeChange, initTime;
     boolean first = true;
-
+    boolean auton;
+    public double getP;
     double maxV, maxA;
 
     double[] correctionVals = new double[3];
@@ -26,12 +27,13 @@ class MotionProfilingController {
     boolean inMotion = false;
 
 
-    public MotionProfilingController(Pose2d robotPose, double maxV, double maxA) {
+    public MotionProfilingController(Pose2d robotPose, double maxV, double maxA, boolean auton) {
+        this.auton = auton;
         this.maxV = maxV;
         this.maxA = maxA;
         this.robotPose = robotPose;
-        this.tStart = System.currentTimeMillis();
-        this.timeSinceInit = System.currentTimeMillis();
+
+        this.initTime = System.currentTimeMillis();
     }
 
     public void updateRequestedPose(double x, double y, double theta, double v, double a){
@@ -42,10 +44,10 @@ class MotionProfilingController {
         this.reqA = a;
 
         motionProfileY = new MotionProfile(this.reqY, maxV, maxA);
-        MotionProfilePIDController pidYDistance = new MotionProfilePIDController(motionProfileY, yKP, yKI, yKD, xKV, xKA);
+        pidYDistance = new MotionProfilePIDController(motionProfileY, yKP, yKI, yKD, xKV, xKA);
 
         motionProfileX = new MotionProfile(this.reqX, maxV, maxA);
-        MotionProfilePIDController pidXDistance = new MotionProfilePIDController(motionProfileX, xKP, xKI, xKD, yKV, yKA);
+        pidXDistance = new MotionProfilePIDController(motionProfileX, xKP, xKI, xKD, yKV, yKA);
 
         pidTheta = new PIDController(reqTheta, rKP, rKI, rKD, true);
     }
@@ -55,11 +57,16 @@ class MotionProfilingController {
         this.currentX = robotPose.getX();
         this.currentY = robotPose.getY();
         this.currentTheta = robotPose.getHeading();
+        if (first) {
+            timeChange = System.currentTimeMillis() - initTime;
+            first = false;
+        }
 
-        /*if(inMotion){
-            correctionX = pidXDistance.update(motionProfileX.getP(System.currentTimeMillis() - tStart));
 
-            correctionY = pidYDistance.update(motionProfileY.getP(System.currentTimeMillis() - tStart));
+        if(auton){
+            correctionX = pidXDistance.update(motionProfileX.getP((double) (System.currentTimeMillis() - timeChange - initTime)));
+
+            correctionY = pidYDistance.update(motionProfileY.getP((double) (System.currentTimeMillis() - timeChange - initTime)));
 
             correctionTheta = pidTheta.update(currentTheta);
 
@@ -70,7 +77,7 @@ class MotionProfilingController {
             correctionVals[0] = 0;
             correctionVals[1] = 0;
             correctionVals[2] = 0;
-        }*/
+        }
 
         return correctionVals;
     }

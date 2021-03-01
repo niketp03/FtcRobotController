@@ -74,17 +74,18 @@ public class Robot {
     public float yCor = 0;
     public float rCor = 0;
 
-    public boolean auton;
+    public boolean auton = false;
 
 
     private PIDController pidYDistance = new PIDController(0f, yKPR, yKIR, yKDR, false);
     private PIDController pidXDistance = new PIDController(0f, xKPR, xKIR, xKDR, false);
     private PIDController pidRotation = new PIDController(0.0f, rKPR, rKIR, rKDR, true);
 
-    public MotionProfilingController mpController = new MotionProfilingController(robotPose, 0.031, 0.0001);
+    public MotionProfilingController mpController = new MotionProfilingController(robotPose, 0.031, 0.0001, auton);
 
     public Robot(HardwareMap map, boolean auton){
         this.auton = auton;
+        mpController.auton = this.auton;
         this.components = new Component[]{
                 new Motor(3, "backLeft", map, true),              //0 left odometer
                 new Motor(2, "backRight", map, false),              //1 right odometer
