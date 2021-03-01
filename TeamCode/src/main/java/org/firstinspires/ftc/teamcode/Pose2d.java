@@ -146,9 +146,9 @@ public class Pose2d {
         double delta_right_encoder_pos = this.deltaEncoderTicks[0][0];
         double delta_center_encoder_pos = this.deltaEncoderTicks[2][0];
 
-        double phi = (delta_left_encoder_pos - delta_right_encoder_pos) / trackwidth;
-        double delta_middle_pos = (delta_left_encoder_pos + delta_right_encoder_pos) / 2;
-        double delta_perp_pos = delta_center_encoder_pos - forwardOffset * phi;
+        double phi = (R * (delta_left_encoder_pos - delta_right_encoder_pos)) / trackwidth;
+        double delta_middle_pos = (R * (delta_left_encoder_pos + delta_right_encoder_pos)) / 2;
+        double delta_perp_pos = R * (delta_center_encoder_pos - forwardOffset * phi);
 
         double deltaX = delta_middle_pos * Math.cos(heading) - delta_perp_pos * Math.sin(heading);
         double deltaY = delta_middle_pos * Math.sin(heading) + delta_perp_pos * Math.cos(heading);
