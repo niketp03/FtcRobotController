@@ -20,7 +20,46 @@ public class Pose2d {
     private double x = 0.0;
     private double y = 0.0;
     private double heading = 0.0;
+    private double time = System.currentTimeMillis();
 
+    public double getxVelocity() {
+        return xVelocity;
+    }
+
+    public void setxVelocity(double xVelocity) {
+        this.xVelocity = xVelocity;
+    }
+
+    public double getyVelocity() {
+        return yVelocity;
+    }
+
+    public void setyVelocity(double yVelocity) {
+        this.yVelocity = yVelocity;
+    }
+
+    public double getxAcceleration() {
+        return xAcceleration;
+    }
+
+    public void setxAcceleration(double xAcceleration) {
+        this.xAcceleration = xAcceleration;
+    }
+
+    public double getyAcceleration() {
+        return yAcceleration;
+    }
+
+    public void setyAcceleration(double yAcceleration) {
+        this.yAcceleration = yAcceleration;
+    }
+
+    private double xVelocity;
+    private double yVelocity;
+    private double deltaXVelocity;
+    private double deltaYVelocity;
+    private double xAcceleration;
+    private double yAcceleration;
 
 
     public double getX() {
@@ -111,13 +150,22 @@ public class Pose2d {
         double delta_middle_pos = (delta_left_encoder_pos + delta_right_encoder_pos) / 2;
         double delta_perp_pos = delta_center_encoder_pos - forwardOffset * phi;
 
-        double delta_x = delta_middle_pos * Math.cos(heading) - delta_perp_pos * Math.sin(heading);
-        double delta_y = delta_middle_pos * Math.sin(heading) + delta_perp_pos * Math.cos(heading);
+        double deltaX = delta_middle_pos * Math.cos(heading) - delta_perp_pos * Math.sin(heading);
+        double deltaY = delta_middle_pos * Math.sin(heading) + delta_perp_pos * Math.cos(heading);
 
-        x += delta_x;
-        y += delta_y;
+        this.deltaXVelocity = (deltaX/(System.currentTimeMillis()-this.time)) - this.xVelocity;
+        this.deltaYVelocity = (deltaY/(System.currentTimeMillis()-this.time)) - this.yVelocity;
+        this.xVelocity = (deltaX/(System.currentTimeMillis()-this.time));
+        this.yVelocity = (deltaY/(System.currentTimeMillis()-this.time));
+
+        this.xAcceleration = (deltaXVelocity/(System.currentTimeMillis()-this.time));
+        this.yAcceleration = (deltaYVelocity/(System.currentTimeMillis()-this.time));
+
+        x += deltaX;
+        y += deltaY;
         heading += phi;
 
+        this.time = System.currentTimeMillis();
         this.oldTicks = encoderTicks;
     }
 }
