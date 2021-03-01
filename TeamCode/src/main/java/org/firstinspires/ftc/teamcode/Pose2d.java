@@ -7,8 +7,8 @@ public class Pose2d {
      */
     private double R;
 
-    private double x_0;
-    private double y_0;
+    private double trackwidth;
+    private double forwardOffset;
 
     /*
         x,y = coordinates of the robot (in)
@@ -54,17 +54,14 @@ public class Pose2d {
     };
 
     /*
-    t1, t2, t3 = orientation of each odometry pod (radians)
-
-    x1, x2, x3 = X-coordinates of each odometry pod from center (in)
-
-    y1, y2, y3 = Y-coordinates of each odometry pod from center (in)
+    trackwidth = distance between right and left odometry pods; = 15.3543307
+    forwardOffset = distance from center of rotation to the middle odometry pods; = 0.1673228
      */
-    public Pose2d(double x_0, double y_0, double R){
+    public Pose2d(double trackwidth, double forwardOffset, double R){
         this.R = R;
 
-        this.x_0 = x_0;
-        this.y_0 = y_0;
+        this.trackwidth = trackwidth;
+        this.forwardOffset = forwardOffset;
     }
 
     /*
@@ -106,14 +103,21 @@ public class Pose2d {
 
         deltaThetas = changeToRadians(this.deltaEncoderTicks);
 
-        double deltaX = (R / 2) * (deltaThetas[0][0] + deltaThetas[1][0]);
-        double deltaY = (R) * (((x_0/(2*y_0))*(deltaThetas[0][0] - deltaThetas[1][0])) + deltaThetas[2][0]);
-        double deltaHeading = (R / (2 * y_0)) * (deltaThetas[1][0] - deltaThetas[0][0]);
+        double delta_left_encoder_pos = this.deltaEncoderTicks[1][0];
+        double delta_right_encoder_pos = this.deltaEncoderTicks[0][0];
+        double delta_center_encoder_pos = this.deltaEncoderTicks[2][0];
 
+        double phi = (delta_left_encoder_pos - delta_right_encoder_pos) / trackwidth;
+        double delta_middle_pos = (delta_left_encoder_pos + delta_right_encoder_pos) / 2;
+        double delta_perp_pos = delta_center_encoder_pos - forwardOffset * phi;
 
-        x = x + deltaX;
-        y = y + deltaY;
-        heading = heading + deltaHeading;
+        double delta_x = delta_middle_pos * Math.cos(heading) - delta_perp_pos * Math.sin(heading);
+        double delta_y = delta_middle_pos * Math.sin(heading) + delta_perp_pos * Math.cos(heading);
+
+        x += delta_x;
+        y += delta_y;
+        heading += phi;
+
         this.oldTicks = encoderTicks;
     }
 }

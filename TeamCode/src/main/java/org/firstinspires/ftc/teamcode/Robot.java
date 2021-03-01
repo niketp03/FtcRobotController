@@ -18,20 +18,21 @@ public class Robot {
     Odometer 2 = L
     Odometer 3 = M
      */
-    /*
+
     public Pose2d robotPose = new Pose2d(
-            -0.1673228,
-            7.7716535,
+            15.3543307,
+            0.1673228,
             0.6968503935
     );
-    */
 
+    /*
     public Pose robotPose = new Pose(
             Math.PI/2, Math.PI/2, 0.0,
             7.7716535, -7.5826772, -0.0551181,
             -1.314961, -1.314961, -0.1673228,
             0.6968503935
             );
+    */
 
     //Autonomous Constants
     public float currentR = 0.0f;
