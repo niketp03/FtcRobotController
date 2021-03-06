@@ -17,7 +17,7 @@ public class AutonTest extends OpMode {
     @Override
     public void init() {
         robot = new Robot(hardwareMap, true);
-        robot.mpController.updateRequestedPose(24, 24, 0, 0, 0);
+        robot.mpController.updateRequestedPose(24, 0, 0, 0, 0);
     }
 
     @Override
@@ -42,16 +42,7 @@ public class AutonTest extends OpMode {
         telemetry.addData("tDelta", (System.currentTimeMillis() - timeChange - robot.mpController.initTime));
         telemetry.addData("getVX", (robot.mpController.motionProfileX.getV(System.currentTimeMillis() - timeChange - robot.mpController.initTime)));
         telemetry.addData("getVY", (robot.mpController.motionProfileY.getV(System.currentTimeMillis() - timeChange - robot.mpController.initTime)));
-
-        telemetry.addData("xVel", robot.robotPose.getXVelocity());
-        telemetry.addData("yVel", robot.robotPose.getYVelocity());
-        telemetry.addData("xAccel", robot.robotPose.getXAcceleration());
-        telemetry.addData("yAccel", robot.robotPose.getYAcceleration());
-
-        telemetry.addData("rot", robot.robotPose.getHeading());
-        telemetry.addData("x", robot.robotPose.getX());
-        telemetry.addData("y", robot.robotPose.getY());
-
+        
         /* --Telemetry--
         telemetry.addData("stopped", robot.stopped(true));
         telemetry.addData("PositionY", robot.currentY);
