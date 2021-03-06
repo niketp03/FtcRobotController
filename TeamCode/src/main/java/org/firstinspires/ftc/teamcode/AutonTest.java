@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 @TeleOp(name="AutonTest", group="Auton Opmode")
 public class AutonTest extends OpMode {
-
+    int offset = 180;
     Robot robot;
     boolean first = true;
     long timeChange = 0;
@@ -17,7 +17,7 @@ public class AutonTest extends OpMode {
     @Override
     public void init() {
         robot = new Robot(hardwareMap, true);
-        robot.mpController.updateRequestedPose(30, 30, 0, 0, 0);
+        robot.mpController.updateRequestedPose(40, 40, 135, 0, 0);
     }
 
     @Override

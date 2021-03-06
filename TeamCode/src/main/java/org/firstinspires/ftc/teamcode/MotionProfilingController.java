@@ -13,9 +13,9 @@ class MotionProfilingController {
     double maxV, maxA;
 
     double[] correctionVals = new double[3];
-    final double xKP = 5, xKI = 0, xKD = 0, xKV = 0, xKA = 0;
-    final double yKP = 5, yKI = 0, yKD = 0, yKV = 0, yKA = 0;
-    final double rKP = 0, rKI = 0, rKD = 0, rKV = 0, rKA = 0;
+    final double xKP = .05, xKI = 0, xKD = 0, xKV = 0, xKA = 0;
+    final double yKP = .05, yKI = 0, yKD = 0, yKV = 0, yKA = 0;
+    final double rKP = .002, rKI = 0, rKD = 0, rKV = 0, rKA = 0;
 
     MotionProfile motionProfileX;
     MotionProfile motionProfileY;
@@ -39,7 +39,7 @@ class MotionProfilingController {
     public void updateRequestedPose(double x, double y, double theta, double v, double a){
         this.reqX = x;
         this.reqY = y;
-        this.reqTheta = theta;
+        this.reqTheta = theta-180;
         this.reqV = v;
         this.reqA = a;
 
