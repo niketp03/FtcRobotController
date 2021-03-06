@@ -81,7 +81,7 @@ public class Robot {
     private PIDController pidXDistance = new PIDController(0f, xKPR, xKIR, xKDR, false);
     private PIDController pidRotation = new PIDController(0.0f, rKPR, rKIR, rKDR, true);
 
-    public MotionProfilingController mpController = new MotionProfilingController(robotPose, 0.031, 0.0001, auton);
+    public MotionProfilingController mpController = new MotionProfilingController(robotPose, 0.018, 0.0000889, auton);
 
     public Robot(HardwareMap map, boolean auton){
         this.auton = auton;
