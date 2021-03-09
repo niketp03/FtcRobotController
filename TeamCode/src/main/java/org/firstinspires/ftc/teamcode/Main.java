@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @TeleOp(name="Main TeleOp", group="Juice TeleOp")
 public class Main extends OpMode{
@@ -28,10 +31,14 @@ public class Main extends OpMode{
         dpad
      */
 
+    FtcDashboard dashboard = FtcDashboard.getInstance();
+    Telemetry dashboardTelemetry = dashboard.getTelemetry();
+    
     @Override
     public void init() {
         robot = new Robot(hardwareMap, false);
         telemetry.addData("Init", "Robot created");
+
     }
 
     public void start(){
@@ -83,6 +90,10 @@ public class Main extends OpMode{
         telemetry.addData("Middle Odometer", robot.drivetrain.frontLeft.getEncoderValue());
         telemetry.addData("Left Odometer", robot.drivetrain.backLeft.getEncoderValue());
         telemetry.addData("Right Odometer", robot.drivetrain.backRight.getEncoderValue());
+
+        dashboardTelemetry.addData("rot", robot.robotPose.getHeading());
+        dashboardTelemetry.addData("x", robot.robotPose.getX());
+        dashboardTelemetry.addData("y", robot.robotPose.getY());
 
         //telemetry.addData("leftmemer", (robot.robotPose.C[0][0] + " " + robot.robotPose.C[0][1] + " " + robot.robotPose.C[0][2] + " " + robot.robotPose.C[1][0] + " " + robot.robotPose.C[1][1] + " " + robot.robotPose.C[1][2] + " " + robot.robotPose.C[2][0] + " " + robot.robotPose.C[2][1] + " " + robot.robotPose.C[2][2]));
         //telemetry.addData("leftmemer", (robot.robotPose.CInverse[0][0] + " " + robot.robotPose.CInverse[0][1] + " " + robot.robotPose.CInverse[0][2] + " " + robot.robotPose.CInverse[1][0] + " " + robot.robotPose.CInverse[1][1] + " " + robot.robotPose.CInverse[1][2] + " " + robot.robotPose.CInverse[2][0] + " " + robot.robotPose.CInverse[2][1] + " " + robot.robotPose.CInverse[2][2]));
