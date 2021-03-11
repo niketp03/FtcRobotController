@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -17,12 +19,33 @@ public class AutonTest extends OpMode {
     @Override
     public void init() {
         robot = new Robot(hardwareMap, true);
-        robot.mpController.updateRequestedPose(24, 24, 0, 0, 0);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        robot.mpController.updateRequestedPose(24, 0, 0, 0, 0);
+
     }
 
     @Override
     public void init_loop(){
+        telemetry.addData("getP", robot.mpController.getP);
+        telemetry.addData("xCor", robot.xCor);
+        telemetry.addData("yCor", robot.yCor);
+        telemetry.addData("rCor", robot.rCor);
+        telemetry.addData("tDelta", (System.currentTimeMillis() - timeChange - robot.mpController.initTime));
+        telemetry.addData("getVX", (robot.mpController.motionProfileX.getV(System.currentTimeMillis() - timeChange - robot.mpController.initTime)));
+        telemetry.addData("getPX", (robot.mpController.motionProfileX.getP(System.currentTimeMillis() - timeChange - robot.mpController.initTime)));
+        telemetry.addData("getVY", (robot.mpController.motionProfileY.getV(System.currentTimeMillis() - timeChange - robot.mpController.initTime)));
+        telemetry.addData("getPX", (robot.mpController.motionProfileY.getP(System.currentTimeMillis() - timeChange - robot.mpController.initTime)));
 
+
+        telemetry.addData("xVel", robot.robotPose.getXVelocity());
+        telemetry.addData("yVel", robot.robotPose.getYVelocity());
+        telemetry.addData("xAccel", robot.robotPose.getXAcceleration());
+        telemetry.addData("yAccel", robot.robotPose.getYAcceleration());
+
+        telemetry.addData("rot", robot.robotPose.getHeading());
+        telemetry.addData("x", robot.robotPose.getX());
+        telemetry.addData("y", robot.robotPose.getY());
     }
 
     @Override
@@ -33,6 +56,7 @@ public class AutonTest extends OpMode {
             timeChange = System.currentTimeMillis() - robot.mpController.initTime;
             first = false;
         }
+
         telemetry.addData("dTime", System.currentTimeMillis() - lastTime);
         lastTime = System.currentTimeMillis();
         telemetry.addData("getP", robot.mpController.getP);
@@ -41,7 +65,10 @@ public class AutonTest extends OpMode {
         telemetry.addData("rCor", robot.rCor);
         telemetry.addData("tDelta", (System.currentTimeMillis() - timeChange - robot.mpController.initTime));
         telemetry.addData("getVX", (robot.mpController.motionProfileX.getV(System.currentTimeMillis() - timeChange - robot.mpController.initTime)));
+        telemetry.addData("getPX", (robot.mpController.motionProfileX.getP(System.currentTimeMillis() - timeChange - robot.mpController.initTime)));
         telemetry.addData("getVY", (robot.mpController.motionProfileY.getV(System.currentTimeMillis() - timeChange - robot.mpController.initTime)));
+        telemetry.addData("getPX", (robot.mpController.motionProfileY.getP(System.currentTimeMillis() - timeChange - robot.mpController.initTime)));
+
 
         telemetry.addData("xVel", robot.robotPose.getXVelocity());
         telemetry.addData("yVel", robot.robotPose.getYVelocity());
