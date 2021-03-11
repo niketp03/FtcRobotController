@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 import java.util.ArrayList;
 
 public class Robot {
-    private Component[] components;
+    public Component[] components;
     public Mecanum drivetrain;
     public Gyro gyro;
 
@@ -19,20 +19,20 @@ public class Robot {
     Odometer 3 = M
      */
 
-    public Pose2d robotPose = new Pose2d(
+    /*public Pose2d robotPose = new Pose2d(
             15.3543307,
             0.1673228,
             0.6968503935
-    );
+    );*/
 
-    /*
+
     public Pose robotPose = new Pose(
             Math.PI/2, Math.PI/2, 0.0,
             7.7716535, -7.5826772, -0.0551181,
             -1.314961, -1.314961, -0.1673228,
             0.6968503935
             );
-    */
+
 
     //Autonomous Constants
     public float currentR = 0.0f;
@@ -81,7 +81,7 @@ public class Robot {
     private PIDController pidXDistance = new PIDController(0f, xKPR, xKIR, xKDR, false);
     private PIDController pidRotation = new PIDController(0.0f, rKPR, rKIR, rKDR, true);
 
-    public MotionProfilingController mpController = new MotionProfilingController(robotPose, 0.031, 0.0001, auton);
+    public MotionProfilingController mpController = new MotionProfilingController(robotPose, 0.031, 0.00004, auton);
 
     public Robot(HardwareMap map, boolean auton){
         this.auton = auton;
@@ -135,7 +135,7 @@ public class Robot {
     public void updateLoop(){
 
         robotPose.updateOdometry(new double[][]{
-                {-1 * (double) ((Motor) components[1]).getEncoderValue()}, //odo 1 = R
+                {-(double) ((Motor) components[1]).getEncoderValue()}, //odo 1 = R
                 {(double) ((Motor) components[0]).getEncoderValue()}, //odo 2 = L
                 {(double) ((Motor) components[2]).getEncoderValue()}  //odo 3 = M
         });
