@@ -65,7 +65,19 @@ public class Main extends OpMode{
 
     @Override
     public void loop() {
-        robot.updateLoop();
+        robot.updateLoop(); //DISABLE FOR COMPETITION
+
+        robot.turbo(gamepad1.right_bumper);
+
+        robot.toggleIntake(gamepad1.a);
+
+        robot.primeShooter(gamepad1.x);
+
+        robot.shoot(gamepad1.b);
+
+        robot.wobbleGoalRaise(gamepad2.a);
+
+        robot.wobbleGoalClaw(gamepad2.b);
 
         if(gamepad1.dpad_down){
             robot.drive(0, 0.4f, 0f);
