@@ -21,9 +21,6 @@ public class Pose {
 
     double[][] soln;
 
-    double deltaX;
-    double deltaY;
-    double deltaHeading;
 
     /*
         x,y = coordinates of the robot (in)
@@ -154,9 +151,12 @@ public class Pose {
         deltaThetas = changeToRadians(this.deltaEncoderTicks);
         this.soln = Matrix.multiply(CInverse, deltaThetas);
 
-        this.deltaX = soln[0][0] * R;
-        this.deltaY = soln[1][0] * R;
-        this.deltaHeading = soln[2][0] * R;
+        double deltaPerp = soln[0][0] * R;
+        double deltaMiddle = soln[1][0] * R;
+        double deltaHeading = soln[2][0] * R;
+
+        double deltaY = deltaMiddle * Math.cos(heading) - deltaPerp * Math.sin(heading);
+        double deltaX = deltaMiddle * Math.sin(heading) + deltaPerp * Math.cos(heading);
 
         this.deltaXVelocity = (deltaX/(System.currentTimeMillis()-this.time)) - this.xVelocity;
         this.deltaYVelocity = (deltaY/(System.currentTimeMillis()-this.time)) - this.yVelocity;
@@ -165,12 +165,13 @@ public class Pose {
 
         this.xAcceleration = (deltaXVelocity/(System.currentTimeMillis()-this.time));
         this.yAcceleration = (deltaYVelocity/(System.currentTimeMillis()-this.time));
+
         x = x + deltaX;
         y = y + deltaY;
+        heading = heading + deltaHeading;
+
         this.time = System.currentTimeMillis();
 
-
-        heading = heading + deltaHeading;
         this.oldTicks = encoderTicks;
     }
 }

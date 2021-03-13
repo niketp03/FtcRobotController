@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 class MotionProfilingController {
-    Pose2d robotPose;
+    Pose robotPose;
 
     double reqX = 0, reqY = 0, reqTheta = 0, reqV = 0, reqA = 0;
     double correctionX = 0, correctionY = 0, correctionTheta = 0;
@@ -13,9 +13,9 @@ class MotionProfilingController {
     double maxV, maxA;
 
     double[] correctionVals = new double[3];
-    final double xKP = .05, xKI = 0, xKD = 0, xKV = 0, xKA = 0;
-    final double yKP = .05, yKI = 0, yKD = 0, yKV = 0, yKA = 0;
-    final double rKP = .002, rKI = 0, rKD = 0, rKV = 0, rKA = 0;
+    final double xKP = .03, xKI = 0.005, xKD = 0, xKV = 0, xKA = 0;
+    final double yKP = 0, yKI = 0, yKD = 0, yKV = 0, yKA = 0;
+    final double rKP = 0, rKI = 0, rKD = 0, rKV = 0, rKA = 0;
 
     MotionProfile motionProfileX;
     MotionProfile motionProfileY;
@@ -27,7 +27,7 @@ class MotionProfilingController {
     boolean inMotion = false;
 
 
-    public MotionProfilingController(Pose2d robotPose, double maxV, double maxA, boolean auton) {
+    public MotionProfilingController(Pose robotPose, double maxV, double maxA, boolean auton) {
         this.auton = auton;
         this.maxV = maxV;
         this.maxA = maxA;
@@ -39,7 +39,7 @@ class MotionProfilingController {
     public void updateRequestedPose(double x, double y, double theta, double v, double a){
         this.reqX = x;
         this.reqY = y;
-        this.reqTheta = theta-180;
+        this.reqTheta = theta;
         this.reqV = v;
         this.reqA = a;
 
@@ -64,9 +64,9 @@ class MotionProfilingController {
 
 
         if(auton){
-            correctionX = pidXDistance.update(motionProfileX.getP((double) (System.currentTimeMillis() - timeChange - initTime)));
+            correctionX = pidXDistance.update(currentX);
 
-            correctionY = pidYDistance.update(motionProfileY.getP((double) (System.currentTimeMillis() - timeChange - initTime)));
+            correctionY = pidYDistance.update(currentY);
 
             correctionTheta = pidTheta.update(currentTheta);
 

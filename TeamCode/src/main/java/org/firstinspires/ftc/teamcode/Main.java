@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @TeleOp(name="Main TeleOp", group="Juice TeleOp")
 public class Main extends OpMode{
@@ -28,10 +32,30 @@ public class Main extends OpMode{
         dpad
      */
 
+
     @Override
     public void init() {
         robot = new Robot(hardwareMap, false);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         telemetry.addData("Init", "Robot created");
+
+        telemetry.addData("xVel", robot.robotPose.getXVelocity());
+        telemetry.addData("yVel", robot.robotPose.getYVelocity());
+        telemetry.addData("xAccel", robot.robotPose.getXAcceleration());
+        telemetry.addData("yAccel", robot.robotPose.getYAcceleration());
+
+        telemetry.addData("rot", robot.robotPose.getHeading());
+        telemetry.addData("x", robot.robotPose.getX());
+        telemetry.addData("y", robot.robotPose.getY());
+
+        telemetry.addData("maxXVelocity", maxXVel);
+        telemetry.addData("maxYVelocity", maxYVel);
+        telemetry.addData("maxXAcceleration", maxXAccel);
+        telemetry.addData("maxYAcceleration", maxYAccel);
+        telemetry.addData("Middle Odometer", (double) ((Motor) robot.components[2]).getEncoderValue());
+        telemetry.addData("Left Odometer", (double) ((Motor) robot.components[0]).getEncoderValue());
+        telemetry.addData("Right Odometer", -(double) ((Motor) robot.components[1]).getEncoderValue());
     }
 
     public void start(){
@@ -41,7 +65,19 @@ public class Main extends OpMode{
 
     @Override
     public void loop() {
-        robot.updateLoop();
+        robot.updateLoop(); //DISABLE FOR COMPETITION
+
+        robot.turbo(gamepad1.right_bumper);
+
+        robot.toggleIntake(gamepad1.a);
+
+        robot.primeShooter(gamepad1.x);
+
+        robot.shoot(gamepad1.b);
+
+        robot.wobbleGoalRaise(gamepad2.a);
+
+        robot.wobbleGoalClaw(gamepad2.b);
 
         if(gamepad1.dpad_down){
             robot.drive(0, 0.4f, 0f);
@@ -80,9 +116,10 @@ public class Main extends OpMode{
         telemetry.addData("maxYVelocity", maxYVel);
         telemetry.addData("maxXAcceleration", maxXAccel);
         telemetry.addData("maxYAcceleration", maxYAccel);
-        telemetry.addData("Middle Odometer", robot.drivetrain.frontLeft.getEncoderValue());
-        telemetry.addData("Left Odometer", robot.drivetrain.backLeft.getEncoderValue());
-        telemetry.addData("Right Odometer", robot.drivetrain.backRight.getEncoderValue());
+
+        telemetry.addData("Middle Odometer", (double) ((Motor) robot.components[2]).getEncoderValue());
+        telemetry.addData("Left Odometer", (double) ((Motor) robot.components[0]).getEncoderValue());
+        telemetry.addData("Right Odometer", -(double) ((Motor) robot.components[1]).getEncoderValue());
 
         //telemetry.addData("leftmemer", (robot.robotPose.C[0][0] + " " + robot.robotPose.C[0][1] + " " + robot.robotPose.C[0][2] + " " + robot.robotPose.C[1][0] + " " + robot.robotPose.C[1][1] + " " + robot.robotPose.C[1][2] + " " + robot.robotPose.C[2][0] + " " + robot.robotPose.C[2][1] + " " + robot.robotPose.C[2][2]));
         //telemetry.addData("leftmemer", (robot.robotPose.CInverse[0][0] + " " + robot.robotPose.CInverse[0][1] + " " + robot.robotPose.CInverse[0][2] + " " + robot.robotPose.CInverse[1][0] + " " + robot.robotPose.CInverse[1][1] + " " + robot.robotPose.CInverse[1][2] + " " + robot.robotPose.CInverse[2][0] + " " + robot.robotPose.CInverse[2][1] + " " + robot.robotPose.CInverse[2][2]));

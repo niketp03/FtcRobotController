@@ -90,5 +90,5 @@ class MotionProfile{
 
     private double v2(double t){ return maxV; }
 
-    private double v3(double t){ return (-maxA * t) - (maxA * (t1 + t2 + t3)); }
+    private double v3(double t){ return (-maxA * t) + (maxA * (t1 + t2 + t3)); }
 }

@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 import java.util.ArrayList;
 
 public class Robot {
-    private Component[] components;
+    public Component[] components;
     public Mecanum drivetrain;
     public Gyro gyro;
 
@@ -19,20 +19,20 @@ public class Robot {
     Odometer 3 = M
      */
 
-    public Pose2d robotPose = new Pose2d(
+    /*public Pose2d robotPose = new Pose2d(
             15.3543307,
             0.1673228,
             0.6968503935
-    );
+    );*/
 
-    /*
+
     public Pose robotPose = new Pose(
             Math.PI/2, Math.PI/2, 0.0,
             7.7716535, -7.5826772, -0.0551181,
             -1.314961, -1.314961, -0.1673228,
             0.6968503935
             );
-    */
+
 
     //Autonomous Constants
     public float currentR = 0.0f;
@@ -81,7 +81,7 @@ public class Robot {
     private PIDController pidXDistance = new PIDController(0f, xKPR, xKIR, xKDR, false);
     private PIDController pidRotation = new PIDController(0.0f, rKPR, rKIR, rKDR, true);
 
-    public MotionProfilingController mpController = new MotionProfilingController(robotPose, 0.018, 0.0000889, auton);
+    public MotionProfilingController mpController = new MotionProfilingController(robotPose, 0.03, 0.00003, auton);
 
     public Robot(HardwareMap map, boolean auton){
         this.auton = auton;
@@ -135,7 +135,7 @@ public class Robot {
     public void updateLoop(){
 
         robotPose.updateOdometry(new double[][]{
-                {-1 * (double) ((Motor) components[1]).getEncoderValue()}, //odo 1 = R
+                {-(double) ((Motor) components[1]).getEncoderValue()}, //odo 1 = R
                 {(double) ((Motor) components[0]).getEncoderValue()}, //odo 2 = L
                 {(double) ((Motor) components[2]).getEncoderValue()}  //odo 3 = M
         });
@@ -183,58 +183,27 @@ public class Robot {
         //return (lift.liftMotor2.getEncoderValue() / (8192f)) * 6.1842375f;
     }
 
-    public void changeTarget(float x, float y, float r){
-        //check if targetX has changed
-        if(x != targetX){
-            //float xKP = xKPR;
-            /*if(Math.abs(targetX) <= 10){
-                xKP = xKPR_SMALL;
-                counterBadX++;
-            }
-
-             */
-            //fakeMotor.resetEncoder();
-            //targetX = x;
-            //pidXDistance = new PIDController(targetX, xKP, xKIR, xKDR, false);
-
-            //fakeMotor.resetEncoder(); //reset x odometry encoder
-        }
-
-        //check if targetY has changed
-        /*if(y != targetY){
-
-            lift.liftMotor2.resetEncoder();
-            targetY = y;
-            pidYDistance = new PIDController(targetY, yKPR, yKIR, yKDR, false);
-            counterBadY++;
-            if(targetY!=10.0){
-                rlyBad = true;
-            }
-            //lift.liftMotor2.resetEncoder();//reset y odometry encoder
-        }
-
-        if(r != this.targetR){
-            targetR = r;
-            pidRotation = new PIDController(targetR, rKPR, rKIR, rKDR, true);
-        }
-        */
+    /* -- Subsystem Control -- */
+    public void toggleIntake(boolean a) {
+        //intake Control
     }
 
-    public void autonMove(){
-        /*correctionX = pidXDistance.update(currentX);
-        correctionY = pidYDistance.update(currentY);
-        correctionR = pidRotation.update(currentR);
+    public void primeShooter(boolean x) {
+        //Raise mag
+        //Tilt mag
+        //Start shooter motors
+    }
 
-        float xSpeed = -Range.clip(correctionX, -1, 1);
-        float ySpeed = Range.clip(correctionY, -1, 1);
-        float rSpeed = correctionR;
+    public void shoot(boolean b) {
+        //flick
+    }
 
-        if(autonRotating){
-            xSpeed = 0;
-            ySpeed = 0;
-        }
+    public void wobbleGoalRaise(boolean a) {
+        //Toggle raise or lower wobble goals
+    }
 
-        drivetrain.autonMove(xSpeed, ySpeed, rSpeed);*/
+    public void wobbleGoalClaw(boolean b) {
+        //Toggle claw open or close
     }
 
     public static boolean tol(float current, float target, float tolerance){
