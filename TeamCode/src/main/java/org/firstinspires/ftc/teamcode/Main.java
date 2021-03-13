@@ -79,6 +79,15 @@ public class Main extends OpMode{
 
         robot.wobbleGoalClaw(gamepad2.b);
 
+        if(gamepad2.y){
+            ((Motor) robot.components[4]).setSpeed(-0.75f);
+            ((Motor) robot.components[5]).setSpeed(-0.75f);
+        }else{
+            ((Motor) robot.components[4]).setSpeed(0f);
+            ((Motor) robot.components[5]).setSpeed(0f);
+        }
+
+
         if(gamepad1.dpad_down){
             robot.drive(0, 0.4f, 0f);
         }else if(gamepad1.dpad_up){

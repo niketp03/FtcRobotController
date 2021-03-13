@@ -91,6 +91,8 @@ public class Robot {
                 new Motor(2, "backRight", map, false),              //1 right odometer
                 new Motor(1, "frontLeft", map, true),             //2 middle odometer
                 new Motor(0, "frontRight", map, false),             //3
+                new Motor(2, "forwardShooter", map, true),
+                new Motor(3, "rearShooter", map, false)
         };
 
         if (auton){
