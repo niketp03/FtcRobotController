@@ -1,0 +1,111 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.util.Range;
+
+public class FlyWheel {
+
+
+
+    public Motor shooter1;
+    public Motor shooter2;
+    
+    private double targetRPM;
+    
+    private float shooter1Speed;
+    private float shooter2Speed;
+    
+    private long lastTime;
+    
+    private double pastTicks;
+    private double pastTicks2;
+
+    //temporary value set here
+    targetRPM = 30.0;
+
+    PIDController flywheelPID = new PIDController(targetRPM, rKPR, rKIR, rKDR, false);
+    PIDController flywheelPID2 = new PIDController(targetRPM, rKPR, rKIR, rKDR, false);
+
+
+    shooter1Speed = 0;
+    shooter2Speed = 0;
+
+
+    public FlyWheel(Component shooter1, Component shooter2, boolean auton){
+        this.shooter1 = (Motor) shooter1;
+        this.shooter2 = (Motor) shooter2;
+
+
+
+        shooter1Speed = 1;
+        shooter2Speed = 1;
+        
+        lastTime = System.currentTimeMillis();
+        
+        pastTicks = shooter1.getEncoderValue();
+        pastTicks2 = shooter2.getEncoderValue();
+
+
+
+
+
+    }
+    public void moveWheels(){
+
+
+        shooter1.setSpeed(Range.clip(shooter1Speed, -1, 1));
+        shooter2.setSpeed(Range.clip(shooter2Speed, -1, 1));
+
+        long time = System.currentTimeMillis();
+        
+        //calculating RPM from rotations per second
+        if ((time - LastTime) == 1000){
+
+            double currentTicks = shooter1.getEncoderValue();
+            double currentTicks2 = shooter2.getEncoderValue();
+
+            currentRPM = (currentTicks - pastTicks)/28 * 60;
+            currentRPM2 = (currentTicks2 - pastTicks2)/28 * 60;
+            LastTime = time;
+            pastTicks = currentTicks;
+            pastTicks2 = currentTicks2;
+
+        }
+
+
+        correction1 = flywheelPID.update(currentRPM);
+        correction2 = flywheelPID2.update(currentRPM2);
+
+
+        shooter1Speed *= correction1;
+        shooter2Speed *= correction2;
+
+
+
+
+
+
+    }
+
+
+
+    public void resetMotorSpeeds(){
+        shooter1Speed = 1;
+        shooter2Speed = 1;
+
+    }
+
+
+
+    public void resetAllEncoders(){
+        shooter1.resetEncoder();
+        shooter2.resetEncoder();
+
+    }
+
+    public void stop(){
+        shooter1.setSpeed(Range.clip(0, -1, 1));
+        shooter2.setSpeed(Range.clip(0, -1, 1));
+
+    }
+
+}
