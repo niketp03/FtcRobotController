@@ -12,6 +12,7 @@ public class Robot {
     private Component[] components;
     public Mecanum drivetrain;
     public Gyro gyro;
+    public StepperServo intakeServo;
 
     /*
     Odometer 1 = R
@@ -247,5 +248,12 @@ public class Robot {
         } else {
             return Math.abs(lastY - currentY) <= 0.01;
         }
+    }
+
+    public void foundationHookControl(boolean pressed){
+        if(pressed){
+            intakeServo.setAngle(0);
+        }
+
     }
 }
