@@ -86,3 +86,6 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 .idea
+TeamCode/src/main/java/org/firstinspires/ftc/teamcode/.DS_Store
+TeamCode/src/main/java/org/firstinspires/ftc/.DS_Store
+TeamCode/src/main/java/org/firstinspires/.DS_Store
