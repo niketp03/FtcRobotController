@@ -183,58 +183,27 @@ public class Robot {
         //return (lift.liftMotor2.getEncoderValue() / (8192f)) * 6.1842375f;
     }
 
-    public void changeTarget(float x, float y, float r){
-        //check if targetX has changed
-        if(x != targetX){
-            //float xKP = xKPR;
-            /*if(Math.abs(targetX) <= 10){
-                xKP = xKPR_SMALL;
-                counterBadX++;
-            }
-
-             */
-            //fakeMotor.resetEncoder();
-            //targetX = x;
-            //pidXDistance = new PIDController(targetX, xKP, xKIR, xKDR, false);
-
-            //fakeMotor.resetEncoder(); //reset x odometry encoder
-        }
-
-        //check if targetY has changed
-        /*if(y != targetY){
-
-            lift.liftMotor2.resetEncoder();
-            targetY = y;
-            pidYDistance = new PIDController(targetY, yKPR, yKIR, yKDR, false);
-            counterBadY++;
-            if(targetY!=10.0){
-                rlyBad = true;
-            }
-            //lift.liftMotor2.resetEncoder();//reset y odometry encoder
-        }
-
-        if(r != this.targetR){
-            targetR = r;
-            pidRotation = new PIDController(targetR, rKPR, rKIR, rKDR, true);
-        }
-        */
+    /* -- Subsystem Control -- */
+    public void toggleIntake(boolean a) {
+        //intake Control
     }
 
-    public void autonMove(){
-        /*correctionX = pidXDistance.update(currentX);
-        correctionY = pidYDistance.update(currentY);
-        correctionR = pidRotation.update(currentR);
+    public void primeShooter(boolean x) {
+        //Raise mag
+        //Tilt mag
+        //Start shooter motors
+    }
 
-        float xSpeed = -Range.clip(correctionX, -1, 1);
-        float ySpeed = Range.clip(correctionY, -1, 1);
-        float rSpeed = correctionR;
+    public void shoot(boolean b) {
+        //flick
+    }
 
-        if(autonRotating){
-            xSpeed = 0;
-            ySpeed = 0;
-        }
+    public void wobbleGoalRaise(boolean a) {
+        //Toggle raise or lower wobble goals
+    }
 
-        drivetrain.autonMove(xSpeed, ySpeed, rSpeed);*/
+    public void wobbleGoalClaw(boolean b) {
+        //Toggle claw open or close
     }
 
     public static boolean tol(float current, float target, float tolerance){
