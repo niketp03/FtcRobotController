@@ -12,6 +12,7 @@ public class Robot {
     public Component[] components;
     public Mecanum drivetrain;
     public Gyro gyro;
+    public FlyWheel flywheel;
 
     /*
     Odometer 1 = R
@@ -83,6 +84,9 @@ public class Robot {
 
     public MotionProfilingController mpController = new MotionProfilingController(robotPose, 0.03, 0.00003, auton);
 
+    private boolean previousPrimeShooter = false;
+    private boolean shooterPrimed = false;
+
     public Robot(HardwareMap map, boolean auton){
         this.auton = auton;
         mpController.auton = this.auton;
@@ -113,7 +117,11 @@ public class Robot {
             );
         }
 
+
+
         this.gyro = new Gyro(map);
+
+        this.flywheel = new FlyWheel(components[4], components[5]);
 
         drivetrain.resetAllEncoders();
 
@@ -129,9 +137,6 @@ public class Robot {
         pidXDistance = new PIDController(0, xKPR, xKIR, xKDR, false);
         pidYDistance = new PIDController(0, yKPR, yKIR, yKDR, false);
         pidRotation = new PIDController(0, rKPR, rKIR, rKDR, true);
-
-
-
     }
 
     public void updateLoop(){
@@ -191,9 +196,17 @@ public class Robot {
     }
 
     public void primeShooter(boolean x) {
-        //Raise mag
-        //Tilt mag
-        //Start shooter motors
+        if (x && !previousPrimeShooter){
+            if (shooterPrimed){
+                //Lower mag
+                //Straighten mag
+                flywheel.stop();
+            } else {
+                //Raise mag
+                //Tilt mag
+                flywheel.moveWheels();
+            }
+        }
     }
 
     public void shoot(boolean b) {

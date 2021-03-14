@@ -24,8 +24,10 @@ public class FlyWheel {
     public double shooter2Speed = 0.0;
     
     private double shooterFF = 0.7;
+    public double currentRPM = 0;
+    public double currentRPM2 = 0;
 
-    public FlyWheel(Component shooter1, Component shooter2, boolean auton){
+    public FlyWheel(Component shooter1, Component shooter2){
         this.shooter1 = (Motor) shooter1;
         this.shooter2 = (Motor) shooter2;
 
@@ -50,8 +52,8 @@ public class FlyWheel {
         double currentTicks = shooter1.getEncoderValue();
         double currentTicks2 = shooter2.getEncoderValue();
         
-        double currentRPM = ((shooter1.getEncoderValue() - pastTicks) / (time - lastTime)) * ((60000 * 40)/(28*22));
-        double currentRPM2 = ((shooter2.getEncoderValue() - pastTicks) / (time - lastTime)) * ((60000 * 40)/(28*22));
+        currentRPM = ((shooter1.getEncoderValue() - pastTicks) / (time - lastTime)) * ((60000 * 40)/(28*22));
+        currentRPM2 = ((shooter2.getEncoderValue() - pastTicks2) / (time - lastTime)) * ((60000 * 40)/(28*22));
         
         lastTime = time;
         
@@ -65,12 +67,9 @@ public class FlyWheel {
         shooter2Speed = correction2 + shooterFF;
     }
 
-
-
     public void resetMotorSpeeds(){
         shooter1Speed = 0.7;
         shooter2Speed = 0.7;
-
     }
 
     public void resetAllEncoders(){
@@ -79,9 +78,7 @@ public class FlyWheel {
     }
 
     public void stop(){
-        shooter1.setSpeed(Range.clip(0, -1, 1));
-        shooter2.setSpeed(Range.clip(0, -1, 1));
-
+        shooter1.setSpeed(0);
+        shooter2.setSpeed(0);
     }
-
 }
