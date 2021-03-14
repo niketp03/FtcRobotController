@@ -84,8 +84,8 @@ public class Robot {
 
     public MotionProfilingController mpController = new MotionProfilingController(robotPose, 0.03, 0.00003, auton);
 
-    private boolean previousPrimeShooter = false;
-    private boolean shooterPrimed = false;
+    public boolean previousPrimeShooter = false;
+    public boolean shooterPrimed = false;
 
     public Robot(HardwareMap map, boolean auton){
         this.auton = auton;
@@ -153,6 +153,8 @@ public class Robot {
         lastX = currentX;
         currentX = getOdoX();
 
+        flywheel.updateRPM();
+
 
         double[] values = mpController.updateLoop();
         xCor = (float) values[0];
@@ -201,12 +203,15 @@ public class Robot {
                 //Lower mag
                 //Straighten mag
                 flywheel.stop();
+                shooterPrimed = false;
             } else {
                 //Raise mag
                 //Tilt mag
                 flywheel.moveWheels();
+                shooterPrimed = true;
             }
         }
+        previousPrimeShooter = x;
     }
 
     public void shoot(boolean b) {

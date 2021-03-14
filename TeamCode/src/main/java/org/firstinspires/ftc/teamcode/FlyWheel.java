@@ -13,9 +13,9 @@ public class FlyWheel {
     private double pastTicks2;
 
     //temporary value set here
-    private double targetRPM = 4000.0;
+    private double targetRPM = 5500.0;
 
-    final double KP = 0.01, KI = 0.00, KD = 0.00;
+    final double KP = 0.0005, KI = 0.00, KD = 0.00;
 
     PIDController flywheelPID = new PIDController(targetRPM, KP, KI, KD, false);
     PIDController flywheelPID2 = new PIDController(targetRPM, KP, KI, KD, false);
@@ -26,6 +26,8 @@ public class FlyWheel {
     private double shooterFF = 0.7;
     public double currentRPM = 0;
     public double currentRPM2 = 0;
+
+    boolean flywheelSpin = false;
 
     public FlyWheel(Component shooter1, Component shooter2){
         this.shooter1 = (Motor) shooter1;
@@ -41,22 +43,20 @@ public class FlyWheel {
     }
     
     public void moveWheels(){
+        flywheelSpin = true;
+    }
 
-
-        shooter1.setSpeed((float) Range.clip(shooter1Speed, -1, 1));
-        shooter2.setSpeed((float) Range.clip(shooter2Speed, -1, 1));
+    public void updateRPM(){
 
         long time = System.currentTimeMillis();
-        
-        //RPM calculation
         double currentTicks = shooter1.getEncoderValue();
         double currentTicks2 = shooter2.getEncoderValue();
-        
+
         currentRPM = ((shooter1.getEncoderValue() - pastTicks) / (time - lastTime)) * ((60000 * 40)/(28*22));
         currentRPM2 = ((shooter2.getEncoderValue() - pastTicks2) / (time - lastTime)) * ((60000 * 40)/(28*22));
-        
+
         lastTime = time;
-        
+
         pastTicks = currentTicks;
         pastTicks2 = currentTicks2;
 
@@ -65,6 +65,14 @@ public class FlyWheel {
 
         shooter1Speed = correction1 + shooterFF;
         shooter2Speed = correction2 + shooterFF;
+
+        if (flywheelSpin){
+            shooter1.setSpeed((float) Range.clip(shooter1Speed, -1, 1));
+            shooter2.setSpeed((float) Range.clip(shooter1Speed, -1, 1));
+        } else {
+            shooter1.setSpeed(0);
+            shooter2.setSpeed(0);
+        }
     }
 
     public void resetMotorSpeeds(){
@@ -78,7 +86,6 @@ public class FlyWheel {
     }
 
     public void stop(){
-        shooter1.setSpeed(0);
-        shooter2.setSpeed(0);
+        flywheelSpin = false;
     }
 }
