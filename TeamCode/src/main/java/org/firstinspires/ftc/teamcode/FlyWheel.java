@@ -7,18 +7,18 @@ public class FlyWheel {
     public Motor shooter1;
     public Motor shooter2;
     
-    private double targetRPM;
-    
     private long lastTime;
     
     private double pastTicks;
     private double pastTicks2;
 
     //temporary value set here
-    targetRPM = 4000.0;
+    private double targetRPM = 4000.0;
 
-    PIDController flywheelPID = new PIDController(targetRPM, rKPR, rKIR, rKDR, false);
-    PIDController flywheelPID2 = new PIDController(targetRPM, rKPR, rKIR, rKDR, false);
+    final double KP = 0.01, KI = 0.00, KD = 0.00;
+
+    PIDController flywheelPID = new PIDController(targetRPM, KP, KI, KD, false);
+    PIDController flywheelPID2 = new PIDController(targetRPM, KP, KI, KD, false);
 
     public double shooter1Speed = 0.0;
     public double shooter2Speed = 0.0;
@@ -34,15 +34,15 @@ public class FlyWheel {
         
         lastTime = System.currentTimeMillis();
         
-        pastTicks = shooter1.getEncoderValue();
-        pastTicks2 = shooter2.getEncoderValue();
+        pastTicks = this.shooter1.getEncoderValue();
+        pastTicks2 = this.shooter2.getEncoderValue();
     }
     
     public void moveWheels(){
 
 
-        shooter1.setSpeed(Range.clip(shooter1Speed, -1, 1));
-        shooter2.setSpeed(Range.clip(shooter2Speed, -1, 1));
+        shooter1.setSpeed((float) Range.clip(shooter1Speed, -1, 1));
+        shooter2.setSpeed((float) Range.clip(shooter2Speed, -1, 1));
 
         long time = System.currentTimeMillis();
         
@@ -50,16 +50,16 @@ public class FlyWheel {
         double currentTicks = shooter1.getEncoderValue();
         double currentTicks2 = shooter2.getEncoderValue();
         
-        currentRPM = ((shooter1.getEncoderValue() - pastTicks) / (time - lastTime)) * ((60000 * 40)/(28*22));
-        currentRPM2 = ((shooter2.getEncoderValue() - pastTicks) / (time - lastTime)) * ((60000 * 40)/(28*22));
+        double currentRPM = ((shooter1.getEncoderValue() - pastTicks) / (time - lastTime)) * ((60000 * 40)/(28*22));
+        double currentRPM2 = ((shooter2.getEncoderValue() - pastTicks) / (time - lastTime)) * ((60000 * 40)/(28*22));
         
-        lastTime = time
+        lastTime = time;
         
         pastTicks = currentTicks;
         pastTicks2 = currentTicks2;
 
-        correction1 = flywheelPID.update(currentRPM);
-        correction2 = flywheelPID2.update(currentRPM2);
+        double correction1 = flywheelPID.update(currentRPM);
+        double correction2 = flywheelPID2.update(currentRPM2);
 
         shooter1Speed = correction1 + shooterFF;
         shooter2Speed = correction2 + shooterFF;
