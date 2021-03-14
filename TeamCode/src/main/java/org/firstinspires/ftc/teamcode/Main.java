@@ -15,6 +15,10 @@ public class Main extends OpMode{
     double maxYVel = 0;
     double maxXAccel = 0;
     double maxYAccel = 0;
+
+    double lastEnc = 0;
+    double lastTime = System.currentTimeMillis();
+
     /*
     GAMEPAD CONTROLS:
     GAMEPAD 1:
@@ -80,8 +84,8 @@ public class Main extends OpMode{
         robot.wobbleGoalClaw(gamepad2.b);
 
         if(gamepad2.y){
-            ((Motor) robot.components[4]).setSpeed(-0.75f);
-            ((Motor) robot.components[5]).setSpeed(-0.75f);
+            ((Motor) robot.components[4]).setSpeed(-.7f);
+            ((Motor) robot.components[5]).setSpeed(-.7f);
         }else{
             ((Motor) robot.components[4]).setSpeed(0f);
             ((Motor) robot.components[5]).setSpeed(0f);
@@ -129,6 +133,11 @@ public class Main extends OpMode{
         telemetry.addData("Middle Odometer", (double) ((Motor) robot.components[2]).getEncoderValue());
         telemetry.addData("Left Odometer", (double) ((Motor) robot.components[0]).getEncoderValue());
         telemetry.addData("Right Odometer", -(double) ((Motor) robot.components[1]).getEncoderValue());
+
+        telemetry.addData("FlywheelSpeed", (((double) ((Motor) robot.components[4]).getEncoderValue() - lastEnc) / (System.currentTimeMillis() - lastTime)) * ((60000*40) / (28*22)));
+        lastEnc = (double) ((Motor) robot.components[4]).getEncoderValue();
+        lastTime = System.currentTimeMillis();
+
 
         //telemetry.addData("leftmemer", (robot.robotPose.C[0][0] + " " + robot.robotPose.C[0][1] + " " + robot.robotPose.C[0][2] + " " + robot.robotPose.C[1][0] + " " + robot.robotPose.C[1][1] + " " + robot.robotPose.C[1][2] + " " + robot.robotPose.C[2][0] + " " + robot.robotPose.C[2][1] + " " + robot.robotPose.C[2][2]));
         //telemetry.addData("leftmemer", (robot.robotPose.CInverse[0][0] + " " + robot.robotPose.CInverse[0][1] + " " + robot.robotPose.CInverse[0][2] + " " + robot.robotPose.CInverse[1][0] + " " + robot.robotPose.CInverse[1][1] + " " + robot.robotPose.CInverse[1][2] + " " + robot.robotPose.CInverse[2][0] + " " + robot.robotPose.CInverse[2][1] + " " + robot.robotPose.CInverse[2][2]));
