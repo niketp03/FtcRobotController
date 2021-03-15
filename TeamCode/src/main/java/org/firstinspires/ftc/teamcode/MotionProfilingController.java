@@ -43,10 +43,10 @@ class MotionProfilingController {
         this.reqV = v;
         this.reqA = a;
 
-        motionProfileY = new MotionProfile(this.reqY, maxV, maxA);
+        motionProfileY = new MotionProfile(this.reqY, maxV, maxA, robotPose.getY());
         pidYDistance = new MotionProfilePIDController(motionProfileY, yKP, yKI, yKD, xKV, xKA);
 
-        motionProfileX = new MotionProfile(this.reqX, maxV, maxA);
+        motionProfileX = new MotionProfile(this.reqX, maxV, maxA, robotPose.getX());
         pidXDistance = new MotionProfilePIDController(motionProfileX, xKP, xKI, xKD, yKV, yKA);
 
         pidTheta = new PIDController(reqTheta, rKP, rKI, rKD, true);

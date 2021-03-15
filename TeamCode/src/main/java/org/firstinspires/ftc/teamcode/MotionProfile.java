@@ -2,13 +2,14 @@ package org.firstinspires.ftc.teamcode;
 
 class MotionProfile{
 
-    double targetDistance, maxV, maxA;
+    double targetDistance, maxV, maxA, offset;
     double t0, t1, t2, t3;
 
-    public MotionProfile(double targetDistance, double maxV, double maxA){
-        this.targetDistance = targetDistance;
+    public MotionProfile(double targetDistance, double maxV, double maxA, double offset){
+        this.targetDistance = targetDistance - offset;
         this.maxV = maxV;
         this.maxA = maxA;
+        this.offset = offset;
 
         this.t1 = maxV / maxA;
         this.t2 = (targetDistance / maxV) - (maxV / maxA);
@@ -19,9 +20,9 @@ class MotionProfile{
 
     public double getP(double t){
         if (t2 < 0){
-            return findAreaUntilTimeTriangle(t);
+            return findAreaUntilTimeTriangle(t) + offset;
         } else {
-            return findAreaUntilTimeTrapezoid(t);
+            return findAreaUntilTimeTrapezoid(t) + offset;
         }
     }
 
