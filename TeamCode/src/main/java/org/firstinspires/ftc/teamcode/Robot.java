@@ -82,7 +82,7 @@ public class Robot {
     private PIDController pidXDistance = new PIDController(0f, xKPR, xKIR, xKDR, false);
     private PIDController pidRotation = new PIDController(0.0f, rKPR, rKIR, rKDR, true);
 
-    public MotionProfilingController mpController = new MotionProfilingController(robotPose, 0.03, 0.00003, auton);
+    public MotionProfilingController mpController = new MotionProfilingController(robotPose, 0.045, 0.00005, auton);
 
     public boolean previousPrimeShooter = false;
     public boolean shooterPrimed = false;
@@ -142,8 +142,8 @@ public class Robot {
     public void updateLoop(){
 
         robotPose.updateOdometry(new double[][]{
-                {-(double) ((Motor) components[1]).getEncoderValue()}, //odo 1 = R
-                {(double) ((Motor) components[0]).getEncoderValue()}, //odo 2 = L
+                {(double) ((Motor) components[1]).getEncoderValue()}, //odo 1 = R
+                {-(double) ((Motor) components[0]).getEncoderValue()}, //odo 2 = L
                 {(double) ((Motor) components[2]).getEncoderValue()}  //odo 3 = M
         });
 

@@ -2,10 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -20,8 +18,16 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 
-@TeleOp(name="AutonTest", group="Auton Opmode")
-public class AutonTest extends OpMode {
+enum StateBlue{
+    START,
+    FORWARDTOLINE,
+    STRAFETOSHOOT,
+    SHOOT,
+    PARK
+}
+
+@TeleOp(name="Autonomous Ahhhh", group="Auton Opmode")
+public class AutonForwardShoot extends OpMode {
 
     Robot robot;
     boolean first = true;
@@ -29,18 +35,24 @@ public class AutonTest extends OpMode {
     long lastTime = System.currentTimeMillis();
 
     OpenCvInternalCamera phoneCam;
-    SkystoneDeterminationPipeline pipeline;
+    AutonTest.SkystoneDeterminationPipeline pipeline;
+
+    private StateBlue currentState;
+
+
+    private final float YTOL = 1.0f;
+    private final float RTOL = 3.0f;
+    private final float XTOL = 1.0f;
+
 
     @Override
     public void init() {
         robot = new Robot(hardwareMap, true);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        robot.mpController.updateRequestedPose(0, 24, 0, 0, 0);
-
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-        pipeline = new SkystoneDeterminationPipeline();
+        pipeline = new AutonTest.SkystoneDeterminationPipeline();
         phoneCam.setPipeline(pipeline);
 
         // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
@@ -56,7 +68,6 @@ public class AutonTest extends OpMode {
                 phoneCam.startStreaming(320,240, OpenCvCameraRotation.SIDEWAYS_LEFT);
             }
         });
-
     }
 
     @Override
@@ -88,6 +99,7 @@ public class AutonTest extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addData("State", currentState);
 
         robot.updateLoop();
         if (first) {
@@ -120,21 +132,32 @@ public class AutonTest extends OpMode {
         telemetry.addData("Analysis", pipeline.getAnalysis());
         telemetry.addData("Position", pipeline.position);
 
-        /* --Telemetry--
-        telemetry.addData("stopped", robot.stopped(true));
-        telemetry.addData("PositionY", robot.currentY);
-        telemetry.addData("PositionTargetY", robot.targetY);
-        telemetry.addData("CorrectionY", robot.correctionY);
-        telemetry.addData("highestY", robot.highestY);
-        telemetry.addData("PositionX", robot.currentX);
-        telemetry.addData("PositionTargetX", robot.targetX);
-        telemetry.addData("CorrectionX", robot.correctionX);
-        telemetry.addData("highestX", robot.highestX);
-        telemetry.addData("PositionTargetX", robot.targetX);
-        telemetry.addData("Rotation", robot.currentR);
-        telemetry.addData("RotationTarget", robot.targetR);
-        telemetry.addData("CorrectionR", robot.correctionR);
-         */
+        switch(currentState){
+            case START:
+                currentState = StateBlue.FORWARDTOLINE;
+                break;
+
+            case FORWARDTOLINE:
+                robot.mpController.updateRequestedPose(0, 48, 0, 0, 0);
+                if (tol(robot.mpController.currentY , robot.mpController.reqY, YTOL)){
+                    currentState = StateBlue.STRAFETOSHOOT;
+                }
+                break;
+
+            case STRAFETOSHOOT:
+                robot.mpController.updateRequestedPose(22, 0, 0, 0, 0);
+                if (tol(robot.mpController.currentX , robot.mpController.reqX, XTOL)){
+                    currentState = StateBlue.PARK;
+                }
+                break;
+
+            case PARK:
+                break;
+        }
+    }
+
+    public static boolean tol(double current, double target, double tolerance){
+        return Math.abs(current - target) <= tolerance;
     }
 
     public static class SkystoneDeterminationPipeline extends OpenCvPipeline {
@@ -182,7 +205,7 @@ public class AutonTest extends OpMode {
         int avg1;
 
         // Volatile since accessed by OpMode thread w/o synchronization
-        public volatile RingPosition position = RingPosition.FOUR;
+        public volatile AutonTest.SkystoneDeterminationPipeline.RingPosition position = AutonTest.SkystoneDeterminationPipeline.RingPosition.FOUR;
 
         /*
          * This function takes the RGB frame, converts to YCrCb,
@@ -216,13 +239,13 @@ public class AutonTest extends OpMode {
                     BLUE, // The color the rectangle is drawn in
                     2); // Thickness of the rectangle lines
 
-            position = RingPosition.FOUR; // Record our analysis
+            position = AutonTest.SkystoneDeterminationPipeline.RingPosition.FOUR; // Record our analysis
             if(avg1 > FOUR_RING_THRESHOLD){
-                position = RingPosition.FOUR;
+                position = AutonTest.SkystoneDeterminationPipeline.RingPosition.FOUR;
             }else if (avg1 > ONE_RING_THRESHOLD){
-                position = RingPosition.ONE;
+                position = AutonTest.SkystoneDeterminationPipeline.RingPosition.ONE;
             }else{
-                position = RingPosition.NONE;
+                position = AutonTest.SkystoneDeterminationPipeline.RingPosition.NONE;
             }
 
             Imgproc.rectangle(
@@ -240,5 +263,4 @@ public class AutonTest extends OpMode {
             return avg1;
         }
     }
-
 }
