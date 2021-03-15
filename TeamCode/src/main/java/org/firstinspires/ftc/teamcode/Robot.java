@@ -14,6 +14,14 @@ public class Robot {
     public Gyro gyro;
     public FlyWheel flywheel;
 
+
+    public StepperServo intakeServo1;
+    public StepperServo intakeServo2;
+    public IntakeMotor intakeMotor1;
+    public IntakeMotor intakeMotor2;
+    public boolean previousMotorToggle = false;
+    public boolean previousServoToggle = false;
+
     /*
     Odometer 1 = R
     Odometer 2 = L
@@ -33,7 +41,6 @@ public class Robot {
             -1.314961, -1.314961, -0.1673228,
             0.6968503935
             );
-
 
     //Autonomous Constants
     public float currentR = 0.0f;
@@ -195,6 +202,21 @@ public class Robot {
     /* -- Subsystem Control -- */
     public void toggleIntake(boolean a) {
         //intake Control
+        if(!previousServoToggle){
+            intakeServo1.setAngle(0);
+            intakeServo2.setAngle(0);
+            previousServoToggle = true;
+        }
+        if(previousMotorToggle){
+            intakeMotor1.set(0);
+            intakeMotor2.set(0);
+            previousMotorToggle = false;
+        }
+        else{
+            intakeMotor1.set(1);
+            intakeMotor2.set(1);
+            previousMotorToggle = true;
+        }
     }
 
     public void primeShooter(boolean x) {
@@ -237,4 +259,5 @@ public class Robot {
             return Math.abs(lastY - currentY) <= 0.01;
         }
     }
+
 }
