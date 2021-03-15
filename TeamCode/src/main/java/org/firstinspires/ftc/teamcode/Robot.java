@@ -13,14 +13,14 @@ public class Robot {
     public Mecanum drivetrain;
     public Gyro gyro;
     public FlyWheel flywheel;
+    public Intake intake;
+    public StepperServo wgClaw;
+    public StepperServo wgArm;
 
-
-    public StepperServo intakeServo1;
-    public StepperServo intakeServo2;
-    public IntakeMotor intakeMotor1;
-    public IntakeMotor intakeMotor2;
     public boolean previousMotorToggle = false;
     public boolean previousServoToggle = false;
+    public boolean previousWGClaw = false;
+    public boolean previousWGArm = false;
 
     /*
     Odometer 1 = R
@@ -130,6 +130,11 @@ public class Robot {
 
         this.flywheel = new FlyWheel(components[4], components[5]);
 
+        //this.intake = new Intake(servo1, servo2, motor1, motor2);
+
+        //this.wgClaw = new StepperServo(clawServo);
+        //this.wgArm = new StepperServo(armServo);
+
         drivetrain.resetAllEncoders();
 
         currentR = gyro.getHeading();
@@ -203,18 +208,15 @@ public class Robot {
     public void toggleIntake(boolean a) {
         //intake Control
         if(!previousServoToggle){
-            intakeServo1.setAngle(0);
-            intakeServo2.setAngle(0);
+            intake.deploy();
             previousServoToggle = true;
         }
         if(previousMotorToggle){
-            intakeMotor1.set(0);
-            intakeMotor2.set(0);
+            intake.stop();
             previousMotorToggle = false;
         }
         else{
-            intakeMotor1.set(1);
-            intakeMotor2.set(1);
+            intake.start();
             previousMotorToggle = true;
         }
     }
@@ -242,10 +244,26 @@ public class Robot {
 
     public void wobbleGoalRaise(boolean a) {
         //Toggle raise or lower wobble goals
+        if(previousWGArm){
+            wgArm.setAngle(1);
+            previousWGArm = false;
+        }
+        else{
+            wgArm.setAngle(0);
+            previousWGArm = true;
+        }
     }
 
     public void wobbleGoalClaw(boolean b) {
         //Toggle claw open or close
+        if(previousWGClaw){
+            wgClaw.setAngle(0);
+            previousWGClaw = false;
+        }
+        else{
+            wgClaw.setAngle(1);
+            previousWGClaw = true;
+        }
     }
 
     public static boolean tol(float current, float target, float tolerance){
