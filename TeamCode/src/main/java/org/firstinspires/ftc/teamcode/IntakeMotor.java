@@ -10,7 +10,7 @@ public class IntakeMotor {
         this.intakeMotor = (Motor) intakeMotor;
     }
 
-    public void up(float speed){
+    public void set(float speed){
         intakeMotor.setSpeed(speed);
     }
 
