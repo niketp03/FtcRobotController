@@ -16,6 +16,8 @@ public class Robot {
     public Intake intake;
     public StepperServo wgClaw;
     public StepperServo wgArm;
+    public Mag mag;
+    public Flicker flicker;
 
     public boolean previousMotorToggle = false;
     public boolean previousServoToggle = false;
@@ -93,17 +95,24 @@ public class Robot {
 
     public boolean previousPrimeShooter = false;
     public boolean shooterPrimed = false;
+    private boolean wobbleGoalClawOpen = false;
+    private boolean wobbleGoalArmOpen = false;
+    private boolean intakeOn = false;
 
     public Robot(HardwareMap map, boolean auton){
         this.auton = auton;
         mpController.auton = this.auton;
         this.components = new Component[]{
-                new Motor(3, "backLeft", map, true),              //0 left odometer
-                new Motor(2, "backRight", map, false),              //1 right odometer
-                new Motor(1, "frontLeft", map, true),             //2 middle odometer
-                new Motor(0, "frontRight", map, false),             //3
+                new Motor(3, "backLeft", map, true),                            //0 left odometer
+                new Motor(2, "backRight", map, false),                          //1 right odometer
+                new Motor(1, "frontLeft", map, true),                           //2 middle odometer
+                new Motor(0, "frontRight", map, false),                         //3
                 new Motor(2, "forwardShooter", map, true),
-                new Motor(3, "rearShooter", map, false)
+                new Motor(3, "rearShooter", map, false),
+                new StepperServo(0, "leftMag", map),
+                new StepperServo(0, "midMag", map),
+                new StepperServo(0, "rightMag", map),
+                new StepperServo(0, "flicker", map)
         };
 
         if (auton){
@@ -129,6 +138,10 @@ public class Robot {
         this.gyro = new Gyro(map);
 
         this.flywheel = new FlyWheel(components[4], components[5]);
+
+        this.mag = new Mag(components[6], components[7], components[8]);
+
+        this.flicker = new Flicker(components[9]);
 
         //this.intake = new Intake(servo1, servo2, motor1, motor2);
 
@@ -207,30 +220,28 @@ public class Robot {
     /* -- Subsystem Control -- */
     public void toggleIntake(boolean a) {
         //intake Control
-        if(!previousServoToggle){
-            intake.deploy();
-            previousServoToggle = true;
+        intake.deploy();
+
+        if (a && !previousMotorToggle){
+            if (intakeOn){
+                intake.stop();
+                intakeOn = false;
+            } else {
+                intake.start();
+                intakeOn = true;
+            }
         }
-        if(previousMotorToggle){
-            intake.stop();
-            previousMotorToggle = false;
-        }
-        else{
-            intake.start();
-            previousMotorToggle = true;
-        }
+        previousMotorToggle = a;
     }
 
     public void primeShooter(boolean x) {
         if (x && !previousPrimeShooter){
             if (shooterPrimed){
-                //Lower mag
-                //Straighten mag
+                mag.lowerControl(x);
                 flywheel.stop();
                 shooterPrimed = false;
             } else {
-                //Raise mag
-                //Tilt mag
+                mag.raiseControl(x);
                 flywheel.moveWheels();
                 shooterPrimed = true;
             }
@@ -244,26 +255,30 @@ public class Robot {
 
     public void wobbleGoalRaise(boolean a) {
         //Toggle raise or lower wobble goals
-        if(previousWGArm){
-            wgArm.setAngle(1);
-            previousWGArm = false;
+        if(a && !previousWGArm) {
+            if (wobbleGoalArmOpen) {
+                wgArm.setAngle(0);
+                wobbleGoalArmOpen = false;
+            } else {
+                wgArm.setAngle(30);
+                wobbleGoalArmOpen = true;
+            }
         }
-        else{
-            wgArm.setAngle(0);
-            previousWGArm = true;
-        }
+        previousWGArm = a;
     }
 
     public void wobbleGoalClaw(boolean b) {
         //Toggle claw open or close
-        if(previousWGClaw){
-            wgClaw.setAngle(0);
-            previousWGClaw = false;
+        if(b && !previousWGClaw) {
+            if (wobbleGoalClawOpen) {
+                wgClaw.setAngle(0);
+                wobbleGoalClawOpen = false;
+            } else {
+                wgClaw.setAngle(30);
+                wobbleGoalClawOpen = true;
+            }
         }
-        else{
-            wgClaw.setAngle(1);
-            previousWGClaw = true;
-        }
+        previousWGClaw = b;
     }
 
     public static boolean tol(float current, float target, float tolerance){
