@@ -3,11 +3,11 @@ package org.firstinspires.ftc.teamcode;
 public class Intake {
     public StepperServo intakeServo1;
     public StepperServo intakeServo2;
-    public IntakeMotor intakeMotor1;
-    public IntakeMotor intakeMotor2;
+    public Motor intakeMotor1;
+    public Motor intakeMotor2;
 
-    public Intake(StepperServo intakeServo1, StepperServo intakeServo2, IntakeMotor intakeMotor1,
-                  IntakeMotor intakeMotor2){
+    public Intake(StepperServo intakeServo1, StepperServo intakeServo2, Motor intakeMotor1,
+                  Motor intakeMotor2){
         this.intakeServo1 = intakeServo1;
         this.intakeServo2 = intakeServo2;
         this.intakeMotor1 = intakeMotor1;
@@ -20,13 +20,13 @@ public class Intake {
     }
 
     public void start(){
-        intakeMotor1.set(1);
-        intakeMotor2.set(1);
+        intakeMotor1.setSpeed(1);
+        intakeMotor2.setSpeed(1);
     }
 
     public void stop(){
-        intakeMotor1.set(0);
-        intakeMotor2.set(0);
+        intakeMotor1.setSpeed(0);
+        intakeMotor2.setSpeed(0);
     }
 
 }

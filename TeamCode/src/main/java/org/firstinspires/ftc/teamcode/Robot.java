@@ -112,7 +112,11 @@ public class Robot {
                 new StepperServo(0, "leftMag", map),
                 new StepperServo(0, "midMag", map),
                 new StepperServo(0, "rightMag", map),
-                new StepperServo(0, "flicker", map)
+                new StepperServo(1, "flicker", map),
+                new Motor(0, "intakeFront", map, false),
+                new Motor(0, "intakeRear", map, false),
+                new StepperServo(0, "intakeServoFront", map),
+                new StepperServo(0, "intakeServoRear", map)
         };
 
         if (auton){
@@ -142,6 +146,8 @@ public class Robot {
         this.mag = new Mag(components[6], components[7], components[8]);
 
         this.flicker = new Flicker(components[9]);
+
+        this.intake = new Intake((StepperServo) components[12], (StepperServo) components[13], (Motor) components[10], (Motor) components[11]);
 
         //this.intake = new Intake(servo1, servo2, motor1, motor2);
 
