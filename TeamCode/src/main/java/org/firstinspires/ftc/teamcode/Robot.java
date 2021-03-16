@@ -14,8 +14,7 @@ public class Robot {
     public Gyro gyro;
     public FlyWheel flywheel;
     public Intake intake;
-    public StepperServo wgClaw;
-    public StepperServo wgArm;
+    public WobbleGoal wobbleClaw;
     public Mag mag;
     public Flicker flicker;
 
@@ -151,8 +150,7 @@ public class Robot {
 
         //this.intake = new Intake(servo1, servo2, motor1, motor2);
 
-        //this.wgClaw = new StepperServo(clawServo);
-        //this.wgArm = new StepperServo(armServo);
+        //this.wobbleClaw = new WobbleGoal(clawServo, armServo);
 
         drivetrain.resetAllEncoders();
 
@@ -263,10 +261,10 @@ public class Robot {
         //Toggle raise or lower wobble goals
         if(a && !previousWGArm) {
             if (wobbleGoalArmOpen) {
-                wgArm.setAngle(0);
+                wobbleClaw.armRaise();
                 wobbleGoalArmOpen = false;
             } else {
-                wgArm.setAngle(30);
+                wobbleClaw.armLower();
                 wobbleGoalArmOpen = true;
             }
         }
@@ -277,10 +275,10 @@ public class Robot {
         //Toggle claw open or close
         if(b && !previousWGClaw) {
             if (wobbleGoalClawOpen) {
-                wgClaw.setAngle(0);
+                wobbleClaw.clawClose();
                 wobbleGoalClawOpen = false;
             } else {
-                wgClaw.setAngle(30);
+                wobbleClaw.clawOpen();
                 wobbleGoalClawOpen = true;
             }
         }
