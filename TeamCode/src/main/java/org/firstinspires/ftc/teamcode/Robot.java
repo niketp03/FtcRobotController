@@ -97,6 +97,7 @@ public class Robot {
     private boolean wobbleGoalClawOpen = false;
     private boolean wobbleGoalArmOpen = false;
     private boolean intakeOn = false;
+    private boolean shouldLower = true;
 
     public Robot(HardwareMap map, boolean auton){
         this.auton = auton;
@@ -115,7 +116,10 @@ public class Robot {
                 new Motor(0, "intakeFront", map, false),
                 new Motor(0, "intakeRear", map, false),
                 new StepperServo(0, "intakeServoFront", map),
-                new StepperServo(0, "intakeServoRear", map)
+                new StepperServo(0, "intakeServoRear", map),
+                new StepperServo(0, "wobbleArm",map),
+                new StepperServo(0,"wobbleArm2", map),
+                new StepperServo(0, "wobbleClaw",map)
         };
 
         if (auton){
@@ -150,7 +154,7 @@ public class Robot {
 
         //this.intake = new Intake(servo1, servo2, motor1, motor2);
 
-        //this.wobbleClaw = new WobbleGoal(clawServo, armServo);
+        this.wobbleClaw = new WobbleGoal((StepperServo)components[16], (StepperServo)components[14], (StepperServo)components[15]);
 
         drivetrain.resetAllEncoders();
 
@@ -241,20 +245,28 @@ public class Robot {
     public void primeShooter(boolean x) {
         if (x && !previousPrimeShooter){
             if (shooterPrimed){
-                mag.lowerControl(x);
+                shouldLower = true;
                 flywheel.stop();
                 shooterPrimed = false;
             } else {
-                mag.raiseControl(x);
+                shouldLower = false;
                 flywheel.moveWheels();
                 shooterPrimed = true;
             }
         }
+
+        if (shouldLower) {
+            mag.lowerControl(x);
+        } else {
+            mag.raiseControl(x);
+        }
+
         previousPrimeShooter = x;
     }
 
     public void shoot(boolean b) {
         //flick
+        flicker.flickControl(b);
     }
 
     public void wobbleGoalRaise(boolean a) {

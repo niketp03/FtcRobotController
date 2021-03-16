@@ -4,14 +4,15 @@ public class Flicker {
 
     private StepperServo flickerServo;
 
-    long timeOfClick = 0l;
+    long timeOfClick = 1l;
 
-    final float initialAngle = 0;
-    final float extendedAngle = 60;
+    final float initialAngle = 48;
+    final float extendedAngle = 0;
 
-    final float delay = 300;
+    final float delay = 200;
 
     boolean firstClick = true;
+    public boolean moveback = false;
 
     public Flicker(Component servo){
         this.flickerServo = (StepperServo) servo;
@@ -25,12 +26,14 @@ public class Flicker {
                 flickerServo.setAngle(extendedAngle);
                 timeOfClick = System.currentTimeMillis();
                 firstClick = false;
+                moveback = true;
             }
         }
 
-        if (System.currentTimeMillis() - timeOfClick >= (delay/2)){
+        if (moveback && System.currentTimeMillis() - timeOfClick >= (delay/2)){
             flickerServo.setAngle(initialAngle);
             firstClick = true;
+            moveback = false;
         }
     }
 }

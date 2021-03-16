@@ -7,10 +7,10 @@ class Mag {
     private StepperServo rightMag;
     private StepperServo midMag;
 
-    final float initialAngleLeft = 0;
-    final float raisedAngleLeft = 60;
+    final float initialAngleLeft = 90;
+    final float raisedAngleLeft = 0;
     final float initialAngleRight = 0;
-    final float raisedAngleRight = 60;
+    final float raisedAngleRight = 90;
     final float flat = 0;
     final float tilted = 20;
 

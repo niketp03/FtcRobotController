@@ -13,7 +13,7 @@ public class FlyWheel {
     private double pastTicks2;
 
     //temporary value set here
-    private double targetRPM = 5500.0;
+    private double targetRPM = 4500;
 
     final double KP = 0.0005, KI = 0.00, KD = 0.00;
 
