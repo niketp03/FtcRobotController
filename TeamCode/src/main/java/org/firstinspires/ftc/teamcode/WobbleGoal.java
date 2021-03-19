@@ -11,18 +11,18 @@ public class WobbleGoal {
         this.wgArm2 = wgArm2;
 
         wgClaw.setAngle(35);
-        wgArm.setAngle(0);
-        wgArm2.setAngle(0);
+        wgArm.setAngle(10);
+        wgArm2.setAngle(155);
     }
 
     public void armRaise(){
         wgArm.setAngle(0);
-        wgArm2.setAngle(0);
+        wgArm2.setAngle(165);
     }
 
     public void armLower(){
-        wgArm.setAngle(30);
-        wgArm2.setAngle(30);
+        wgArm.setAngle(155);
+        wgArm2.setAngle(10);
     }
 
     public void clawClose(){

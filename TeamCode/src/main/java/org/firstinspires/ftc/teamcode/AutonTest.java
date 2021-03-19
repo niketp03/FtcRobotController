@@ -30,6 +30,7 @@ public class AutonTest extends OpMode {
 
     OpenCvInternalCamera phoneCam;
     SkystoneDeterminationPipeline pipeline;
+    private int ringCount = 0;
 
     @Override
     public void init() {
@@ -84,6 +85,16 @@ public class AutonTest extends OpMode {
         telemetry.addData("rot", robot.robotPose.getHeading());
         telemetry.addData("x", robot.robotPose.getX());
         telemetry.addData("y", robot.robotPose.getY());
+
+        if(pipeline.position == SkystoneDeterminationPipeline.RingPosition.FOUR){
+            ringCount = 4;
+        } else if (pipeline.position == SkystoneDeterminationPipeline.RingPosition.ONE){
+            ringCount = 1;
+        } else {
+            ringCount = 0;
+        }
+
+        telemetry.addData("Ring Count", ringCount);
     }
 
     @Override
@@ -120,6 +131,8 @@ public class AutonTest extends OpMode {
         telemetry.addData("Analysis", pipeline.getAnalysis());
         telemetry.addData("Position", pipeline.position);
 
+        telemetry.addData("Ring Count", ringCount);
+
         /* --Telemetry--
         telemetry.addData("stopped", robot.stopped(true));
         telemetry.addData("PositionY", robot.currentY);
@@ -137,7 +150,7 @@ public class AutonTest extends OpMode {
          */
     }
 
-    public static class SkystoneDeterminationPipeline extends OpenCvPipeline {
+    private static class SkystoneDeterminationPipeline extends OpenCvPipeline {
         /*
          * An enum to define the skystone position
          */

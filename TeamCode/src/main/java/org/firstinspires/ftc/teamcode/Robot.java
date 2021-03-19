@@ -85,6 +85,8 @@ public class Robot {
 
     public boolean auton = false;
 
+    public double microstepWobble = 0;
+
 
     private PIDController pidYDistance = new PIDController(0f, yKPR, yKIR, yKDR, false);
     private PIDController pidXDistance = new PIDController(0f, xKPR, xKIR, xKDR, false);
@@ -295,6 +297,13 @@ public class Robot {
             }
         }
         previousWGClaw = b;
+    }
+
+    public void microstepServo(boolean b){
+        if(b){
+            microstepWobble += 0.05;
+            ((StepperServo)components[15]).setAngle((float) microstepWobble);
+        }
     }
 
     public static boolean tol(float current, float target, float tolerance){
