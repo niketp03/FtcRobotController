@@ -81,7 +81,7 @@ public class Main extends OpMode{
 
         robot.wobbleGoalRaise(gamepad2.a);
         //telemetry.addData("micro", robot.microstepWobble);
-        //robot.microstepServo(gamepad2.a);
+        //robot.microstepServo(gamepad2.y);
 
         robot.wobbleGoalClaw(gamepad2.b);
 

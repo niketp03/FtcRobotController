@@ -43,9 +43,9 @@ public class AutonForwardShoot extends OpMode {
 
     public int ringCount = 0;
 
-    private final float YTOL = 1.0f;
+    private final float YTOL = 5.0f;
     private final float RTOL = 3.0f;
-    private final float XTOL = 1.0f;
+    private final float XTOL = 2.0f;
     private boolean shouldWaitForPrime = false;
     private long delayTime = 0l;
     private boolean shouldWaitForShoot = false;
@@ -56,7 +56,7 @@ public class AutonForwardShoot extends OpMode {
         robot = new Robot(hardwareMap, true);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        robot.mpController.updateRequestedPose(0, 24, 0, 0, 0);
+        robot.mpController.updateRequestedPose(0, 0, 0, 0, 0);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
@@ -162,14 +162,14 @@ public class AutonForwardShoot extends OpMode {
                 break;
 
             case FORWARDTOLINE:
-                robot.mpController.updateRequestedPose(0, 61, 0, 0, 0);
-                if (tol(robot.mpController.currentY , robot.mpController.reqY, YTOL)){
-                    currentState = StateBlue.STRAFETOSHOOT;
+                robot.mpController.updateRequestedPose(0, -54, 180, 0, 0);
+                if (tol(-robot.mpController.currentY , robot.mpController.reqY, YTOL)){
+                    currentState = StateBlue.PRIMESHOOTER;
                 }
                 break;
 
             case STRAFETOSHOOT:
-                robot.mpController.updateRequestedPose(22, 61, 0, 0, 0);
+                robot.mpController.updateRequestedPose(22, -54, 180, 0, 0);
                 if (tol(robot.mpController.currentX , robot.mpController.reqX, XTOL)){
                     currentState = StateBlue.PRIMESHOOTER;
                 }
@@ -181,8 +181,10 @@ public class AutonForwardShoot extends OpMode {
                     robot.primeShooter(true);
                     delayTime = System.currentTimeMillis();
                 }
-                if (System.currentTimeMillis() - delayTime >= 1000){
+                if (System.currentTimeMillis() - delayTime >= 50 && System.currentTimeMillis() - delayTime < 1000){
                     robot.primeShooter(false);
+                }
+                if (System.currentTimeMillis() - delayTime >= 1000){
                     currentState = StateBlue.SHOOT;
                 }
                 break;
@@ -193,7 +195,31 @@ public class AutonForwardShoot extends OpMode {
                     robot.shoot(true);
                     delayTime = System.currentTimeMillis();
                 }
-                if (System.currentTimeMillis() - delayTime >= 1000){
+                if (System.currentTimeMillis() - delayTime >= 1000 && System.currentTimeMillis() - delayTime < 1100) {
+                    robot.shoot(false);
+                }
+                if (System.currentTimeMillis() - delayTime >= 1100 && System.currentTimeMillis() - delayTime < 2000){
+                    robot.shoot(true);
+                }
+                if (System.currentTimeMillis() - delayTime >= 2000 && System.currentTimeMillis() - delayTime < 2100) {
+                    robot.shoot(false);
+                }
+                if (System.currentTimeMillis() - delayTime >= 2100 && System.currentTimeMillis() - delayTime < 3000) {
+                    robot.shoot(true);
+                }
+                if (System.currentTimeMillis() - delayTime >= 3000 && System.currentTimeMillis() - delayTime < 3100) {
+                    robot.shoot(false);
+                }
+                if (System.currentTimeMillis() - delayTime >= 3100 && System.currentTimeMillis() - delayTime < 4000) {
+                    robot.shoot(true);
+                }
+                if (System.currentTimeMillis() - delayTime >= 4000 && System.currentTimeMillis() - delayTime < 4100) {
+                    robot.shoot(false);
+                }
+                if (System.currentTimeMillis() - delayTime >= 4100 && System.currentTimeMillis() - delayTime < 5000) {
+                    robot.shoot(true);
+                }
+                if (System.currentTimeMillis() - delayTime >= 5100){
                     robot.shoot(false);
                     currentState = StateBlue.PARK;
                 }

@@ -38,8 +38,8 @@ public class Robot {
 
     public Pose robotPose = new Pose(
             Math.PI/2, Math.PI/2, 0.0,
-            7.7716535, -7.5826772, -0.0551181,
-            -1.314961, -1.314961, -0.1673228,
+            7.41830709, -7.41830709, 0.5748031,
+            0.5748031, 0.5748031, 3.75,
             0.6968503935
             );
 
@@ -92,7 +92,7 @@ public class Robot {
     private PIDController pidXDistance = new PIDController(0f, xKPR, xKIR, xKDR, false);
     private PIDController pidRotation = new PIDController(0.0f, rKPR, rKIR, rKDR, true);
 
-    public MotionProfilingController mpController = new MotionProfilingController(robotPose, 0.045, 0.00005, auton);
+    public MotionProfilingController mpController = new MotionProfilingController(robotPose, 0.03, 0.00005, auton);
 
     public boolean previousPrimeShooter = false;
     public boolean shooterPrimed = false;
@@ -302,7 +302,7 @@ public class Robot {
     public void microstepServo(boolean b){
         if(b){
             microstepWobble += 0.05;
-            ((StepperServo)components[15]).setAngle((float) microstepWobble);
+            ((StepperServo)components[6]).setAngle(90+(float) microstepWobble);
         }
     }
 

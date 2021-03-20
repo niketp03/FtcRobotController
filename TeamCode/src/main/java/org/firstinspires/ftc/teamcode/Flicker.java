@@ -6,10 +6,10 @@ public class Flicker {
 
     long timeOfClick = 1l;
 
-    final float initialAngle = 53;
-    final float extendedAngle = 5;
+    final float initialAngle = 56;
+    final float extendedAngle = 0;
 
-    final float delay = 200;
+    final float delay = 600;
 
     boolean firstClick = true;
     public boolean moveback = false;
