@@ -87,6 +87,8 @@ public class Robot {
 
     public double microstepWobble = 0;
 
+    public boolean intakeRunning = false;
+
 
     private PIDController pidYDistance = new PIDController(0f, yKPR, yKIR, yKDR, false);
     private PIDController pidXDistance = new PIDController(0f, xKPR, xKIR, xKDR, false);
@@ -100,6 +102,8 @@ public class Robot {
     private boolean wobbleGoalArmOpen = false;
     private boolean intakeOn = false;
     private boolean shouldLower = true;
+    private boolean intakeOnForward = false;
+    private boolean intakeOnReverse = false;
 
     public Robot(HardwareMap map, boolean auton){
         this.auton = auton;
@@ -242,6 +246,26 @@ public class Robot {
             }
         }
         previousMotorToggle = a;
+    }
+
+    public void intakeOn(float val) {
+        if (val >= 0.5f){
+            intake.start();
+            intakeOnForward = true;
+        } else if (!intakeOnReverse){
+            intake.stop();
+            intakeOnForward = false;
+        }
+    }
+
+    public void intakeReverse(float val) {
+        if (val >= 0.5f){
+            intake.reverse();
+            intakeOnReverse = true;
+        } else if (!intakeOnForward){
+            intake.stop();
+            intakeOnReverse = false;
+        }
     }
 
     public void primeShooter(boolean x) {

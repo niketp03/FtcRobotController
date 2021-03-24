@@ -37,7 +37,7 @@ public class AutonTest extends OpMode {
         robot = new Robot(hardwareMap, true);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        robot.mpController.updateRequestedPose(0, -55, 180, 0, 0);
+        robot.mpController.updateRequestedPose(0.00001, 0, 0, 0, 0);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
@@ -95,10 +95,15 @@ public class AutonTest extends OpMode {
         }
 
         telemetry.addData("Ring Count", ringCount);
+
+        telemetry.addData("error", robot.mpController.pidTheta.error);
     }
 
     @Override
     public void loop() {
+
+        robot.mpController.updateRequestedPose(0, -20, 0, 0, 0);
+
 
         robot.updateLoop();
         if (first) {
@@ -132,6 +137,7 @@ public class AutonTest extends OpMode {
         telemetry.addData("Position", pipeline.position);
 
         telemetry.addData("Ring Count", ringCount);
+        telemetry.addData("error", robot.mpController.pidTheta.error);
 
         /* --Telemetry--
         telemetry.addData("stopped", robot.stopped(true));
