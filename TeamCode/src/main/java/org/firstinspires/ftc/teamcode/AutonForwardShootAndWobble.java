@@ -25,14 +25,22 @@ enum StateBlueWobble{
     STRAFETOSHOOT,
     PRIMESHOOTER,
     SHOOT,
+    UNPRIMESHOOTER,
+    SECONDLOAD,
+    WAITFORLOADCOMPLETE,
+    FORWARDTOLINEAGAIN,
+    SECONDPRIMESHOOTER,
+    SECONDSHOOT,
     DETECTPILE,
+    UNPRIMESHOOTERAGAIN,
     MOVE4,
     MOVE1,
     MOVE0,
-    PARK
+    DROPWOBBLE,
+    PARK;
 }
 
-@TeleOp(name="Autonomous Ahhhh", group="Auton Opmode")
+@TeleOp(name="Autonomous Full", group="Auton Opmode")
 public class AutonForwardShootAndWobble extends OpMode {
 
     Robot robot;
@@ -47,12 +55,17 @@ public class AutonForwardShootAndWobble extends OpMode {
 
     public int ringCount = 0;
 
-    private final float YTOL = 5.0f;
+    private final float YTOL = 3.0f;
     private final float RTOL = 3.0f;
     private final float XTOL = 2.0f;
     private boolean shouldWaitForPrime = false;
     private long delayTime = 0l;
     private boolean shouldWaitForShoot = false;
+    private boolean shouldWaitForUnPrime = false;
+    private boolean shouldWaitForSecondShoot = false;
+    private boolean shouldWaitForSecondPrime = false;
+    private boolean shouldWaitForLoad = false;
+    private boolean shouldWaitForUnPrimeAgain = false;
 
 
     @Override
@@ -60,7 +73,7 @@ public class AutonForwardShootAndWobble extends OpMode {
         robot = new Robot(hardwareMap, true);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        robot.mpController.updateRequestedPose(0, 0, 0, 0, 0);
+        robot.mpController.updateRequestedPose(0.00000001, 0, 0, 0, 0);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
@@ -116,6 +129,11 @@ public class AutonForwardShootAndWobble extends OpMode {
             ringCount = 0;
         }
 
+        //REMOVE THE THING BELOW
+        ringCount = 4; //REMOVE LATER
+        //REMOVE THIS THING ABOVE
+        //READ ABOVE
+
         telemetry.addData("Ring Count", ringCount);
 
         currentState = StateBlueWobble.START;
@@ -166,14 +184,14 @@ public class AutonForwardShootAndWobble extends OpMode {
                 break;
 
             case FORWARDTOLINE:
-                robot.mpController.updateRequestedPose(0, 56.25, 90, 0, 0);
+                robot.mpController.updateRequestedPose(0, -52, 0, 0, 0);
                 if (tol(-robot.mpController.currentY , robot.mpController.reqY, YTOL)){
                     currentState = StateBlueWobble.STRAFETOSHOOT;
                 }
                 break;
 
             case STRAFETOSHOOT:
-                robot.mpController.updateRequestedPose(21.5, 56.25, 0, 0, 0);
+                robot.mpController.updateRequestedPose(-19, -52, 0, 0, 0);
                 if (tol(robot.mpController.currentX , robot.mpController.reqX, XTOL)){
                     currentState = StateBlueWobble.PRIMESHOOTER;
                 }
@@ -217,6 +235,94 @@ public class AutonForwardShootAndWobble extends OpMode {
                 if (System.currentTimeMillis() - delayTime >= 3100 && System.currentTimeMillis() - delayTime < 4000) {
                     robot.shoot(true);
                 }
+                if (System.currentTimeMillis() - delayTime >= 4100){
+                    robot.shoot(false);
+                    robot.flicker.flickerServo.setAngle(robot.flicker.initialAngle);
+                    currentState = StateBlueWobble.UNPRIMESHOOTER;
+                }
+                break;
+
+            case UNPRIMESHOOTER:
+                if (shouldWaitForUnPrime == false){
+                    shouldWaitForUnPrime = true;
+                    robot.primeShooter(true);
+                    delayTime = System.currentTimeMillis();
+                }
+                if (System.currentTimeMillis() - delayTime >= 50 && System.currentTimeMillis() - delayTime < 1000){
+                    robot.primeShooter(false);
+                }
+                if (System.currentTimeMillis() - delayTime >= 1000){
+                    currentState = StateBlueWobble.SECONDLOAD;
+                }
+                break;
+
+            case SECONDLOAD:
+                robot.mpController.updateRequestedPose(-19, -34, 0, 0, 0);
+                robot.intakeOn(1);
+                robot.intakeReverse(0);
+                if (tol(-robot.mpController.currentY, robot.mpController.reqY, 5)){
+                    currentState = StateBlueWobble.WAITFORLOADCOMPLETE;
+                }
+                break;
+
+            case WAITFORLOADCOMPLETE:
+                if (shouldWaitForLoad == false){
+                    shouldWaitForLoad = true;
+                    delayTime = System.currentTimeMillis();
+                }
+
+                if (System.currentTimeMillis() - delayTime >= 5000){
+                    robot.intakeOn(0);
+                    robot.intakeReverse(0);
+                    currentState = StateBlueWobble.FORWARDTOLINEAGAIN;
+                }
+                break;
+
+            case FORWARDTOLINEAGAIN:
+                robot.mpController.updateRequestedPose(-16, -54, 0, 0, 0);
+                if (tol(-robot.mpController.currentY , robot.mpController.reqY, YTOL)){
+                    currentState = StateBlueWobble.SECONDPRIMESHOOTER;
+                }
+                break;
+
+            case SECONDPRIMESHOOTER:
+                if (shouldWaitForSecondPrime == false){
+                    shouldWaitForSecondPrime = true;
+                    robot.primeShooter(true);
+                    delayTime = System.currentTimeMillis();
+                }
+                if (System.currentTimeMillis() - delayTime >= 50 && System.currentTimeMillis() - delayTime < 1000){
+                    robot.primeShooter(false);
+                }
+                if (System.currentTimeMillis() - delayTime >= 1000 && tol(-robot.mpController.currentY, robot.mpController.reqY, YTOL)){
+                    currentState = StateBlueWobble.SECONDSHOOT;
+                }
+                break;
+
+            case SECONDSHOOT:
+                if (shouldWaitForSecondShoot == false){
+                    shouldWaitForSecondShoot = true;
+                    robot.shoot(true);
+                    delayTime = System.currentTimeMillis();
+                }
+                if (System.currentTimeMillis() - delayTime >= 1000 && System.currentTimeMillis() - delayTime < 1100) {
+                    robot.shoot(false);
+                }
+                if (System.currentTimeMillis() - delayTime >= 1100 && System.currentTimeMillis() - delayTime < 2000){
+                    robot.shoot(true);
+                }
+                if (System.currentTimeMillis() - delayTime >= 2000 && System.currentTimeMillis() - delayTime < 2100) {
+                    robot.shoot(false);
+                }
+                if (System.currentTimeMillis() - delayTime >= 2100 && System.currentTimeMillis() - delayTime < 3000) {
+                    robot.shoot(true);
+                }
+                if (System.currentTimeMillis() - delayTime >= 3000 && System.currentTimeMillis() - delayTime < 3100) {
+                    robot.shoot(false);
+                }
+                if (System.currentTimeMillis() - delayTime >= 3100 && System.currentTimeMillis() - delayTime < 4000) {
+                    robot.shoot(true);
+                }
                 if (System.currentTimeMillis() - delayTime >= 4000 && System.currentTimeMillis() - delayTime < 4100) {
                     robot.shoot(false);
                 }
@@ -225,7 +331,21 @@ public class AutonForwardShootAndWobble extends OpMode {
                 }
                 if (System.currentTimeMillis() - delayTime >= 5100){
                     robot.shoot(false);
-                    currentState = StateBlueWobble.PARK;
+                    currentState = StateBlueWobble.UNPRIMESHOOTERAGAIN;
+                }
+                break;
+
+            case UNPRIMESHOOTERAGAIN:
+                if (shouldWaitForUnPrimeAgain == false){
+                    shouldWaitForUnPrimeAgain = true;
+                    robot.primeShooter(true);
+                    delayTime = System.currentTimeMillis();
+                }
+                if (System.currentTimeMillis() - delayTime >= 50 && System.currentTimeMillis() - delayTime < 1000){
+                    robot.primeShooter(false);
+                }
+                if (System.currentTimeMillis() - delayTime >= 1000){
+                    currentState = StateBlueWobble.DETECTPILE;
                 }
                 break;
 
@@ -240,30 +360,29 @@ public class AutonForwardShootAndWobble extends OpMode {
                 break;
 
             case MOVE4:
-                robot.mpController.updateRequestedPose(32.25, 56.25, 0, 0, 0);
-                if (tol(robot.mpController.currentX , robot.mpController.reqX, XTOL)){
-                    robot.mpController.updateRequestedPose(32.25, 103.25, 0, 0, 0);
-                    if (tol(robot.mpController.currentY , robot.mpController.reqY, YTOL)){
-                        robot.mpController.updateRequestedPose(32.25, 103.25, 45, 0, 0);
-                        if (tol(robot.mpController.currentTheta , robot.mpController.reqTheta, RTOL)) {
-                            currentState = StateBlueWobble.PARK;
-                        }
-                    }
+                robot.mpController.updateRequestedPose(-22, -107, 0, 0, 0);
+                if (tol(-robot.mpController.currentY, robot.mpController.reqY, 5.0) && tol(robot.mpController.currentTheta, robot.mpController.reqTheta, 10.0)){
+                    currentState = StateBlueWobble.DROPWOBBLE;
                 }
                 break;
 
             case MOVE1:
-                    robot.mpController.updateRequestedPose(32.25, 81.25, 0, 0, 0);
-                    if (tol(robot.mpController.currentY , robot.mpController.reqY, YTOL)){
-                        currentState = StateBlueWobble.PARK;
-                    }
+                robot.mpController.updateRequestedPose(-22, -106, 0, 0, 0);
+                if (tol(-robot.mpController.currentY, robot.mpController.reqY, 5.0) && tol(robot.mpController.currentTheta, robot.mpController.reqTheta, 10.0)){
+                    currentState = StateBlueWobble.DROPWOBBLE;
+                }
                 break;
 
             case MOVE0:
-                robot.mpController.updateRequestedPose(43, 56.25, 0, 0, 0);
-                if (tol(robot.mpController.currentX , robot.mpController.reqX, XTOL)){
-                    currentState = StateBlueWobble.PARK;
+                robot.mpController.updateRequestedPose(-36, -84, 0, 0, 0);
+                if (tol(-robot.mpController.currentY, robot.mpController.reqY, 5.0) && tol(robot.mpController.currentTheta, robot.mpController.reqTheta, 10.0)){
+                    currentState = StateBlueWobble.DROPWOBBLE;
                 }
+                break;
+
+            case DROPWOBBLE:
+                telemetry.addData("Wobble dropped?", "Yes");
+                currentState = StateBlueWobble.PARK;
                 break;
 
             case PARK:

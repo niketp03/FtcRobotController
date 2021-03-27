@@ -87,6 +87,8 @@ public class Main extends OpMode{
 
         robot.wobbleGoalClaw(gamepad2.b);
 
+        robot.powershot(gamepad1.left_bumper);
+
 
         if(gamepad1.dpad_down){
             robot.drive(0, 0.4f, 0f);

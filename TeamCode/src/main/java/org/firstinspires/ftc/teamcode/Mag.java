@@ -12,9 +12,10 @@ class Mag {
     final float initialAngleRight = 3;
     final float raisedAngleRight = 84;
     final float flat = 15;
-    final float tilted = 0;
+    final float tilted = 1;
 
-    final float delay = 200;
+    final float delayUp = 100;
+    final float delayDown = 300;
 
     boolean firstClick = true;
 
@@ -37,7 +38,7 @@ class Mag {
             }
         }
 
-        if (System.currentTimeMillis() - clickTime >= delay){
+        if (System.currentTimeMillis() - clickTime >= delayUp){
             midMag.setAngle(tilted);
             firstClick = true;
         }
@@ -53,7 +54,7 @@ class Mag {
             }
         }
 
-        if (System.currentTimeMillis() - clickTime >= delay){
+        if (System.currentTimeMillis() - clickTime >= delayDown){
             midMag.setAngle(flat);
             firstClick = true;
         }

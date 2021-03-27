@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 public class Flicker {
 
-    private StepperServo flickerServo;
+    public StepperServo flickerServo;
 
     long timeOfClick = 1l;
 
-    final float initialAngle = 56;
+    public final float initialAngle = 56;
     final float extendedAngle = 0;
 
     final float delay = 600;

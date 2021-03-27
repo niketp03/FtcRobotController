@@ -20,13 +20,13 @@ public class Intake {
     }
 
     public void start(){
-        intakeMotor1.setSpeed(0.8f);
-        intakeMotor2.setSpeed(0.8f);
+        intakeMotor1.setSpeed(0.4f);
+        intakeMotor2.setSpeed(0.4f);
     }
 
     public void reverse(){
-        intakeMotor1.setSpeed(-0.8f);
-        intakeMotor2.setSpeed(-0.8f);
+        intakeMotor1.setSpeed(-0.4f);
+        intakeMotor2.setSpeed(-0.4f);
     }
 
     public void stop(){

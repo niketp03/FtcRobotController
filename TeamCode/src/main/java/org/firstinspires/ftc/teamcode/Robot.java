@@ -295,6 +295,14 @@ public class Robot {
         flicker.flickControl(b);
     }
 
+    public void powershot(boolean bump) {
+        if (bump){
+            flywheel.targetRPM = 4500;
+        } else {
+            flywheel.targetRPM = 5300;
+        }
+    }
+
     public void wobbleGoalRaise(boolean a) {
         //Toggle raise or lower wobble goals
         if(a && !previousWGArm) {

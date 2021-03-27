@@ -23,7 +23,7 @@ class MotionProfile{
 
     public double getP(double t){
 
-        double tFix = t - timeAtStart;
+        double tFix = t;
 
         if (t2 < 0){
             return findAreaUntilTimeTriangle(tFix) + offset;
@@ -34,7 +34,7 @@ class MotionProfile{
 
     public double getV(double t){
 
-        double tFix = t - timeAtStart;
+        double tFix = t;
 
         if (t2 < 0){
             return equationSetTriangle(tFix);

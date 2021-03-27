@@ -12,8 +12,9 @@ public class FlyWheel {
     private double pastTicks;
     private double pastTicks2;
 
-    //temporary value set here
-    private double targetRPM = 5700;
+    public double targetRPM = 5300;
+
+    public double lastTarget = 5300;
 
     final double KP = 0.0005, KI = 0.00, KD = 0.00;
 
@@ -48,9 +49,15 @@ public class FlyWheel {
 
     public void updateRPM(){
 
+        if (lastTarget != targetRPM){
+            flywheelPID = new PIDController(targetRPM, KP, KI, KD, false);
+            flywheelPID2 = new PIDController(targetRPM, KP, KI, KD, false);
+        }
+
         long time = System.currentTimeMillis();
         double currentTicks = shooter1.getEncoderValue();
         double currentTicks2 = shooter2.getEncoderValue();
+        lastTarget = targetRPM;
 
         currentRPM = ((shooter1.getEncoderValue() - pastTicks) / (time - lastTime)) * ((60000 * 40)/(28*22));
         currentRPM2 = ((shooter2.getEncoderValue() - pastTicks2) / (time - lastTime)) * ((60000 * 40)/(28*22));
