@@ -235,7 +235,13 @@ public class AutonForwardShootAndWobble extends OpMode {
                 if (System.currentTimeMillis() - delayTime >= 3100 && System.currentTimeMillis() - delayTime < 4000) {
                     robot.shoot(true);
                 }
-                if (System.currentTimeMillis() - delayTime >= 4100){
+                if (System.currentTimeMillis() - delayTime >= 4000 && System.currentTimeMillis() - delayTime < 4100) {
+                    robot.shoot(false);
+                }
+                if (System.currentTimeMillis() - delayTime >= 4100 && System.currentTimeMillis() - delayTime < 5000) {
+                    robot.shoot(true);
+                }
+                if (System.currentTimeMillis() - delayTime >= 5100){
                     robot.shoot(false);
                     robot.flicker.flickerServo.setAngle(robot.flicker.initialAngle);
                     currentState = StateBlueWobble.UNPRIMESHOOTER;
@@ -279,8 +285,8 @@ public class AutonForwardShootAndWobble extends OpMode {
                 break;
 
             case FORWARDTOLINEAGAIN:
-                robot.mpController.updateRequestedPose(-16, -54, 0, 0, 0);
-                if (tol(-robot.mpController.currentY , robot.mpController.reqY, YTOL)){
+                robot.mpController.updateRequestedPose(-16, -56, 0, 0, 0);
+                if (tol(-robot.mpController.currentY , robot.mpController.reqY, 5)){
                     currentState = StateBlueWobble.SECONDPRIMESHOOTER;
                 }
                 break;
@@ -345,7 +351,7 @@ public class AutonForwardShootAndWobble extends OpMode {
                     robot.primeShooter(false);
                 }
                 if (System.currentTimeMillis() - delayTime >= 1000){
-                    currentState = StateBlueWobble.DETECTPILE;
+                    currentState = StateBlueWobble.PARK;
                 }
                 break;
 
@@ -386,6 +392,7 @@ public class AutonForwardShootAndWobble extends OpMode {
                 break;
 
             case PARK:
+                robot.mpController.updateRequestedPose(-16, -58, 0, 0, 0);
                 break;
         }
     }
