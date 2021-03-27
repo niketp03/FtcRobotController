@@ -56,7 +56,7 @@ public class AutonForwardShoot extends OpMode {
         robot = new Robot(hardwareMap, true);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        robot.mpController.updateRequestedPose(0, 0, 0, 0, 0);
+        robot.mpController.updateRequestedPose(0.0000001, 0, 0, 0, 0);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
@@ -162,14 +162,14 @@ public class AutonForwardShoot extends OpMode {
                 break;
 
             case FORWARDTOLINE:
-                robot.mpController.updateRequestedPose(0, -54, 180, 0, 0);
+                robot.mpController.updateRequestedPose(0, -54, 0, 0, 0);
                 if (tol(-robot.mpController.currentY , robot.mpController.reqY, YTOL)){
-                    currentState = StateBlue.PRIMESHOOTER;
+                    currentState = StateBlue.STRAFETOSHOOT;
                 }
                 break;
 
             case STRAFETOSHOOT:
-                robot.mpController.updateRequestedPose(22, -54, 180, 0, 0);
+                robot.mpController.updateRequestedPose(-16, -54, 0, 0, 0);
                 if (tol(robot.mpController.currentX , robot.mpController.reqX, XTOL)){
                     currentState = StateBlue.PRIMESHOOTER;
                 }

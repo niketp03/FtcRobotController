@@ -4,8 +4,9 @@ class MotionProfile{
 
     double targetDistance, maxV, maxA, offset;
     double t0, t1, t2, t3;
+    double timeAtStart;
 
-    public MotionProfile(double targetDistance, double maxV, double maxA, double offset){
+    public MotionProfile(double targetDistance, double maxV, double maxA, double offset, double timeAtStart){
         this.targetDistance = targetDistance - offset;
         this.maxV = maxV;
         this.maxA = maxA;
@@ -16,21 +17,29 @@ class MotionProfile{
         this.t3 = maxV / maxA;
 
         this.t0 = Math.sqrt(targetDistance / maxA);
+
+        this.timeAtStart = timeAtStart;
     }
 
     public double getP(double t){
+
+        double tFix = t - timeAtStart;
+
         if (t2 < 0){
-            return findAreaUntilTimeTriangle(t) + offset;
+            return findAreaUntilTimeTriangle(tFix) + offset;
         } else {
-            return findAreaUntilTimeTrapezoid(t) + offset;
+            return findAreaUntilTimeTrapezoid(tFix) + offset;
         }
     }
 
     public double getV(double t){
+
+        double tFix = t - timeAtStart;
+
         if (t2 < 0){
-            return equationSetTriangle(t);
+            return equationSetTriangle(tFix);
         } else {
-            return equationSetTrapezoid(t);
+            return equationSetTrapezoid(tFix);
         }
     }
 

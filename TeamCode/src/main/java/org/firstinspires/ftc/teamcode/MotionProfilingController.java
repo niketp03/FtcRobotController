@@ -15,14 +15,14 @@ class MotionProfilingController {
     double[] correctionVals = new double[3];
     final double xKP = .1, xKI = 0, xKD = 0, xKV = 0, xKA = 0;
     final double yKP = 0.025, yKI = 0, yKD = 0, yKV = 0, yKA = 0;
-    final double rKP = -0.0005, rKI = 0, rKD = 0, rKV = 0, rKA = 0;
+    final double rKP = 0.05, rKI = 0, rKD = 0, rKV = 0, rKA = 0;
 
     MotionProfile motionProfileX;
     MotionProfile motionProfileY;
 
     private MotionProfilePIDController pidYDistance;
     private MotionProfilePIDController pidXDistance;
-    private PIDController pidTheta;
+    public PIDController pidTheta;
 
     boolean inMotion = false;
 
@@ -37,19 +37,23 @@ class MotionProfilingController {
     }
 
     public void updateRequestedPose(double x, double y, double theta, double v, double a){
-        this.reqX = x;
-        this.reqY = y;
-        this.reqTheta = theta;
-        this.reqV = v;
-        this.reqA = a;
 
-        motionProfileY = new MotionProfile(this.reqY, maxV, maxA, -robotPose.getY());
-        pidYDistance = new MotionProfilePIDController(motionProfileY, yKP, yKI, yKD, xKV, xKA);
+        if(x != reqX || y != reqY || theta != reqTheta){
+            this.reqX = x;
+            this.reqY = y;
+            this.reqTheta = theta;
+            this.reqV = v;
+            this.reqA = a;
 
-        motionProfileX = new MotionProfile(this.reqX, maxV, maxA, robotPose.getX());
-        pidXDistance = new MotionProfilePIDController(motionProfileX, xKP, xKI, xKD, yKV, yKA);
+            motionProfileY = new MotionProfile(this.reqY, maxV, maxA, -robotPose.getY(), ((System.currentTimeMillis() - timeChange - initTime)));
+            pidYDistance = new MotionProfilePIDController(motionProfileY, yKP, yKI, yKD, xKV, xKA);
 
-        pidTheta = new PIDController(reqTheta, rKP, rKI, rKD, true);
+            motionProfileX = new MotionProfile(this.reqX, maxV, maxA, robotPose.getX(), ((System.currentTimeMillis() - timeChange - initTime)));
+            pidXDistance = new MotionProfilePIDController(motionProfileX, xKP, xKI, xKD, yKV, yKA);
+
+            pidTheta = new PIDController(reqTheta, rKP, rKI, rKD, true);
+        }
+
     }
 
     public double[] updateLoop(){
@@ -70,8 +74,8 @@ class MotionProfilingController {
 
             correctionTheta = pidTheta.update(currentTheta);
 
-            correctionVals[0] = correctionX;
-            correctionVals[1] = correctionY;
+            correctionVals[1] = correctionY * Math.cos((currentTheta * Math.PI)/180) - correctionX * Math.sin((currentTheta * Math.PI)/180);
+            correctionVals[0] = correctionX * Math.cos((currentTheta * Math.PI)/180) + correctionY * Math.sin((currentTheta * Math.PI)/180);
             correctionVals[2] = correctionTheta;
         } else {
             correctionVals[0] = 0;

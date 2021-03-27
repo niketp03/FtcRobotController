@@ -19,6 +19,7 @@ public class PIDController
     private double kd_;
     private long lastTime_;
     private boolean rot;
+    public double error;
 
     /* Public OpMode members. */
     private PIDController() {}
@@ -40,7 +41,7 @@ public class PIDController
 
         long time = System.currentTimeMillis();
         long period = time - lastTime_;
-        double error;
+
 
         if(rot){
             error  = norm(setPoint_ - newInput);

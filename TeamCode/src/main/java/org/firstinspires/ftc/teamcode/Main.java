@@ -73,7 +73,9 @@ public class Main extends OpMode{
 
         robot.turbo(gamepad1.right_bumper);
 
-        robot.toggleIntake(gamepad1.a);
+        robot.intakeOn(gamepad1.right_trigger);
+
+        robot.intakeReverse(gamepad1.left_trigger);
 
         robot.primeShooter(gamepad1.x);
 
